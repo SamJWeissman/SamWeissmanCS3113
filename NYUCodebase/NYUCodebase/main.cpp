@@ -2,6 +2,7 @@
 #include <SDL_opengl.h>
 #include <SDL_image.h>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -14,6 +15,11 @@ typedef struct {
 	float g;
 	float b;
 } Vertex2D;
+
+typedef struct {
+	float x;
+	float y;
+} CoordHolder;
 
 GLuint LoadTexture(const char *image_path)
 {
@@ -49,7 +55,7 @@ void DrawSprite(GLint texture, float x, float y, float rotation)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void DrawWall(GLint texture, float x, float y)
+void drawWall(GLint texture, float x, float y)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -68,7 +74,7 @@ void DrawWall(GLint texture, float x, float y)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void DrawRoadAcrossScreen(GLuint texture)
+void drawRoadAcrossScreen(GLuint texture)
 {
 	for (float i = -1.37f; i < 1.23; i += .2f)
 	{
@@ -76,49 +82,15 @@ void DrawRoadAcrossScreen(GLuint texture)
 	}
 }
 
-void DrawBackgroundImages(GLuint texture[])
+void drawBackgroundBushes(vector<CoordHolder> &positions, GLuint texture)
 {
-
-		DrawSprite(texture[0], .9f, 0.1f, 0.0f);
-		DrawSprite(texture[1], 0.1f, 0.3f, 0.0f);
-		DrawSprite(texture[2], 1.1f, 0.4f, 0.0f);
-
-		DrawSprite(texture[0], -1.2f, -0.5f, 0.0f);
-		DrawSprite(texture[1], 0.4f, -.7f, 0.0f);
-		DrawSprite(texture[2], -0.6f, 0.3f, 0.0f);
-
-		DrawSprite(texture[0], 0.5f, -.4f, 0.0f);
-		DrawSprite(texture[1], -1.2f, 0.6f, 0.0f);
-		DrawSprite(texture[2], 0.8f, -.8f, 0.0f);
-
-		DrawSprite(texture[0], 0.2f, -.3f, 0.0f);
-		DrawSprite(texture[1], -1.1f, 0.5f, 0.0f);
-		DrawSprite(texture[2], 0.7f, -.8f, 0.0f);
-
-		DrawSprite(texture[0], 0.9f, -.5f, 0.0f);
-		DrawSprite(texture[1], -1.3f, 0.7f, 0.0f);
-		DrawSprite(texture[2], 0.1f, -.9f, 0.0f);
-
-		DrawSprite(texture[3], -0.25f, 0.25f, 0.0f);
-		DrawSprite(texture[3], 0.25f, 0.25f, 0.0f);
-		DrawSprite(texture[3], -0.25f, -0.25f, 0.0f);
-		DrawSprite(texture[3], 0.25f, -0.25f, 0.0f);
-		DrawSprite(texture[3], -0.75f, 0.75f, 0.0f);
-		DrawSprite(texture[3], 0.75f, 0.75f, 0.0f);
-		DrawSprite(texture[3], -0.75f, -0.75f, 0.0f);
-		DrawSprite(texture[3], 0.75f, -0.75f, 0.0f);
-		DrawSprite(texture[3], -0.35f, 0.45f, 0.0f);
-		DrawSprite(texture[3], 0.45f, 0.35f, 0.0f);
-		DrawSprite(texture[3], -0.35f, -0.45f, 0.0f);
-		DrawSprite(texture[3], 0.45f, -0.35f, 0.0f);
-		DrawSprite(texture[3], -1.25f, 0.25f, 0.0f);
-		DrawSprite(texture[3], -1.15f, 0.25f, 0.0f);
-		DrawSprite(texture[3], -1.30f, -0.25f, 0.0f);
-		DrawSprite(texture[3], -1.05f, -0.25f, 0.0f);
-
+	for (unsigned i = 0; i < positions.size() ; i++)
+	{
+		DrawSprite(texture, positions[i].x, positions[i].y, 0.0f);
+	}
 }
 
-void DrawTriangle(float x, float y, float r, float g, float b, float rotation)
+void drawTriangle(float x, float y, float r, float g, float b, float rotation)
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -132,6 +104,88 @@ void DrawTriangle(float x, float y, float r, float g, float b, float rotation)
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_COLOR_ARRAY);
+}
+
+void drawEndZone()
+{
+	for (float i = -.9; i < 1.0f; i += .3f)
+	{
+		drawTriangle(1.23f, i, (rand() % 100) * .01f, (rand() % 100) * .01f, (rand() % 100) * .01f, 0.0f);
+	}
+}
+
+void fillPositions(vector<CoordHolder> &positions)
+{
+	CoordHolder temp;
+	for (int i = 0; i < 80; i++)
+	{
+		if (i < 20)
+		{
+			temp.x = rand() % 133 * -0.01f;
+			temp.y = rand() % 100 * 0.01f;
+			positions.push_back(temp);
+		}
+		else if (i >= 20 && i < 40)
+		{
+			temp.x = rand() % 113 * 0.01f;
+			temp.y = rand() % 100 * 0.01f;
+			positions.push_back(temp);
+		}
+		else if (i >= 40 && i < 60)
+		{
+			temp.x = rand() % 113 * 0.01f;
+			temp.y = rand() % 100 * -0.01f;
+			positions.push_back(temp);
+		}
+		else
+		{
+			temp.x = rand() % 133 * -0.01f;
+			temp.y = rand() % 100 * -0.01f;
+			positions.push_back(temp);
+		}
+	}
+}
+
+class Zombie {
+public:
+	float x;
+	float y;
+	bool moveRight = true;
+	bool alive = true;
+	GLuint zombieTexture = LoadTexture("zombie-icon.png");
+	Zombie(float xPos, float yPos) : x(xPos), y(yPos){}
+
+	void moveZombie()
+	{
+		if (moveRight)
+		{
+			x += rand() % 50 * .0001f;
+			if (x > 1.03f)
+			{
+				moveRight = false;
+			}
+		}
+		else
+		{
+			x -= rand() % 50 * .0001f;
+			if (x < -1.23f)
+			{
+				moveRight = true;
+			}
+		}
+	}
+};
+
+void moveZombieHorde(vector<Zombie*> &zombies)
+{
+	for (unsigned i = 0; i < zombies.size(); i++)
+	{
+		if (zombies[i]->alive)
+		{
+			DrawSprite(zombies[i]->zombieTexture, zombies[i]->x, zombies[i]->y, 0.0f);
+			zombies[i]->moveZombie();
+		}
+	}
 }
 
 int main(int argc, char *argv[])
@@ -148,22 +202,23 @@ int main(int argc, char *argv[])
 	glViewport(0, 0, 800, 600); //Sept 8th -- rendering
 	glMatrixMode(GL_PROJECTION); //Sept 8th -- set to projection matrix
 	glOrtho(-1.33, 1.33, -1.0, 1.0, -1.0, 1.0);//Sept 8th -- left, right, bott, top, zNear, zFar
-
-	GLuint zombie = LoadTexture("zombie-icon.png"); //Sept 10th --
+	
 	GLuint wall = LoadTexture("rpgTile061.png");
 	GLuint road = LoadTexture("roadTile6.png");
-	GLuint smoke = LoadTexture("blackSmoke00.png");
-	GLuint flash = LoadTexture("flash00.png");
-	GLuint explosion = LoadTexture("explosion00.png");
 	GLuint bush = LoadTexture("rpgTile160.png");
 
-	GLuint backgroundImages[4] = { flash, explosion, smoke, bush };
+	vector<CoordHolder> positions;
+	fillPositions(positions);
+	
+	vector<Zombie*> zombies;
+	for (float i = -.9f; i < 1.0f; i += .3f)
+	{
+		Zombie *z = new Zombie(-1.33f, i);
+		zombies.push_back(z);
+	}
 
-	float xPosition = -1.33f;
-	bool moveRight = true;
-
-	float lastFrameTicks = 0.0f; //Sept 10th
-	float rotation = 0.0f; //Sept 10th
+	float lastFrameTicks = 0.0f;
+	//float rotation = 0.0f; //Sept 10th
 
 	while (!done) {
 		while (SDL_PollEvent(&event)) {
@@ -176,44 +231,18 @@ int main(int argc, char *argv[])
 		float elapsed = ticks - lastFrameTicks;
 		int iTicks = (int)SDL_GetTicks() / 1000;
 		lastFrameTicks = ticks; 
-		rotation += 45.0f * elapsed;
+		//rotation += 45.0f * elapsed;
 
 		glMatrixMode(GL_MODELVIEW);
 		glClearColor(0.5f, 1.0f, 0.2f, 0.0f); 
 		glClear(GL_COLOR_BUFFER_BIT); 
 
+		drawWall(wall, 1.23f, -0.5f);
+		drawRoadAcrossScreen(road);
+		drawBackgroundBushes(positions, bush);
+		drawEndZone();
+		moveZombieHorde(zombies);
 
-		DrawWall(wall, 1.23f, -0.5f);
-		DrawRoadAcrossScreen(road);
-		DrawBackgroundImages(backgroundImages);
-
-		for (float i = -.9; i < 1.0; i += .3f){
-			DrawTriangle(1.18f, i, (rand() % 100) * .01f, (rand() % 100) * .01f, (rand() % 100) * .01f, rotation);
-		}
-
-		if (moveRight)
-		{
-			for (float i = -0.9f; i < 1.0f; i += 0.3f){
-				DrawSprite(zombie, xPosition, i, 0.0f);
-			}
-			
-			xPosition += .005f;
-			if (xPosition > 1.03f)
-			{
-				moveRight = false;
-			}
-		}
-		else
-		{
-			for (float i = -0.9f; i < 1.0f; i += 0.3f){
-				DrawSprite(zombie, xPosition, i, 0.0f);
-			}
-			xPosition -= .005f;
-			if (xPosition < -1.23f)
-			{
-				moveRight = true;
-			}
-		}
 		SDL_GL_SwapWindow(displayWindow);
 	}
 
