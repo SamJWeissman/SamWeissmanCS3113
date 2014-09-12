@@ -1,12 +1,21 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_image.h>
+#include <stdlib.h>
 
 using namespace std;
 
 SDL_Window* displayWindow;
 
-GLuint LoadTexture(const char *image_path) 
+typedef struct {
+	float x;
+	float y;
+	float r;
+	float g;
+	float b;
+} Vertex2D;
+
+GLuint LoadTexture(const char *image_path)
 {
 	SDL_Surface *surface = IMG_Load(image_path);
 	GLuint textureID;
@@ -15,12 +24,12 @@ GLuint LoadTexture(const char *image_path)
 	glTexImage2D(GL_TEXTURE_2D, 0, 4, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	//delete surface;
+
+	SDL_FreeSurface(surface);
 	return textureID;
 }
 
-void DrawSprite(GLint texture, float x, float y, float rotation) 
+void DrawSprite(GLint texture, float x, float y, float rotation)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -28,7 +37,26 @@ void DrawSprite(GLint texture, float x, float y, float rotation)
 	glLoadIdentity();
 	glTranslatef(x, y, 0.0);
 	glRotatef(rotation, 0.0, 0.0, 1.0);
-	GLfloat quad[] = { -0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f };
+	GLfloat quad[] = { -0.1f, 0.1f, -0.1f, -0.1f, 0.1f, -0.1f, 0.1f, 0.1f };
+	glVertexPointer(2, GL_FLOAT, 0, quad);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	GLfloat quadUVs[] = { 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0 }; 
+	glTexCoordPointer(2, GL_FLOAT, 0, quadUVs);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDrawArrays(GL_QUADS, 0, 4);
+	glDisable(GL_TEXTURE_2D);
+}
+
+void DrawWall(GLint texture, float x, float y)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(x, y, 0.0);
+	GLfloat quad[] = { -0.1f, 1.5f, -0.1f, -1.5f, 0.1f, -1.5f, 0.1f, 1.5f}; //larger than screen because image was distorting
 	glVertexPointer(2, GL_FLOAT, 0, quad);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	GLfloat quadUVs[] = { 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0 };
@@ -38,6 +66,72 @@ void DrawSprite(GLint texture, float x, float y, float rotation)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawArrays(GL_QUADS, 0, 4);
 	glDisable(GL_TEXTURE_2D);
+}
+
+void DrawRoadAcrossScreen(GLuint texture)
+{
+	for (float i = -1.37f; i < 1.23; i += .2f)
+	{
+		DrawSprite(texture, i, 0.0f, 0.0f);
+	}
+}
+
+void DrawBackgroundImages(GLuint texture[])
+{
+
+		DrawSprite(texture[0], .9f, 0.1f, 0.0f);
+		DrawSprite(texture[1], 0.1f, 0.3f, 0.0f);
+		DrawSprite(texture[2], 1.1f, 0.4f, 0.0f);
+
+		DrawSprite(texture[0], -1.2f, -0.5f, 0.0f);
+		DrawSprite(texture[1], 0.4f, -.7f, 0.0f);
+		DrawSprite(texture[2], -0.6f, 0.3f, 0.0f);
+
+		DrawSprite(texture[0], 0.5f, -.4f, 0.0f);
+		DrawSprite(texture[1], -1.2f, 0.6f, 0.0f);
+		DrawSprite(texture[2], 0.8f, -.8f, 0.0f);
+
+		DrawSprite(texture[0], 0.2f, -.3f, 0.0f);
+		DrawSprite(texture[1], -1.1f, 0.5f, 0.0f);
+		DrawSprite(texture[2], 0.7f, -.8f, 0.0f);
+
+		DrawSprite(texture[0], 0.9f, -.5f, 0.0f);
+		DrawSprite(texture[1], -1.3f, 0.7f, 0.0f);
+		DrawSprite(texture[2], 0.1f, -.9f, 0.0f);
+
+		DrawSprite(texture[3], -0.25f, 0.25f, 0.0f);
+		DrawSprite(texture[3], 0.25f, 0.25f, 0.0f);
+		DrawSprite(texture[3], -0.25f, -0.25f, 0.0f);
+		DrawSprite(texture[3], 0.25f, -0.25f, 0.0f);
+		DrawSprite(texture[3], -0.75f, 0.75f, 0.0f);
+		DrawSprite(texture[3], 0.75f, 0.75f, 0.0f);
+		DrawSprite(texture[3], -0.75f, -0.75f, 0.0f);
+		DrawSprite(texture[3], 0.75f, -0.75f, 0.0f);
+		DrawSprite(texture[3], -0.35f, 0.45f, 0.0f);
+		DrawSprite(texture[3], 0.45f, 0.35f, 0.0f);
+		DrawSprite(texture[3], -0.35f, -0.45f, 0.0f);
+		DrawSprite(texture[3], 0.45f, -0.35f, 0.0f);
+		DrawSprite(texture[3], -1.25f, 0.25f, 0.0f);
+		DrawSprite(texture[3], -1.15f, 0.25f, 0.0f);
+		DrawSprite(texture[3], -1.30f, -0.25f, 0.0f);
+		DrawSprite(texture[3], -1.05f, -0.25f, 0.0f);
+
+}
+
+void DrawTriangle(float x, float y, float r, float g, float b, float rotation)
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(x, y, 0.0);
+	glRotatef(rotation, 0.0, 0.0, 1.0);
+	Vertex2D triangleData[3] = {{ 0.0f, 0.073f, r, g, b }, {-0.1f, -0.1f, r, g, b }, {0.1f, -0.1f, r, g, b }};
+	glVertexPointer(2, GL_FLOAT, sizeof(float) * 5, triangleData);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColorPointer(3, GL_FLOAT, sizeof(float) * 5, &triangleData[0].r);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDisable(GL_VERTEX_ARRAY);
+	glDisable(GL_COLOR_ARRAY);
 }
 
 int main(int argc, char *argv[])
@@ -54,10 +148,22 @@ int main(int argc, char *argv[])
 	glViewport(0, 0, 800, 600); //Sept 8th -- rendering
 	glMatrixMode(GL_PROJECTION); //Sept 8th -- set to projection matrix
 	glOrtho(-1.33, 1.33, -1.0, 1.0, -1.0, 1.0);//Sept 8th -- left, right, bott, top, zNear, zFar
-	
-	GLuint testTexture = LoadTexture("cardSpadesA.png"); //Sept 10th --
+
+	GLuint zombie = LoadTexture("zombie-icon.png"); //Sept 10th --
+	GLuint wall = LoadTexture("rpgTile061.png");
+	GLuint road = LoadTexture("roadTile6.png");
+	GLuint smoke = LoadTexture("blackSmoke00.png");
+	GLuint flash = LoadTexture("flash00.png");
+	GLuint explosion = LoadTexture("explosion00.png");
+	GLuint bush = LoadTexture("rpgTile160.png");
+
+	GLuint backgroundImages[4] = { flash, explosion, smoke, bush };
+
+	float xPosition = -1.33f;
+	bool moveRight = true;
+
 	float lastFrameTicks = 0.0f; //Sept 10th
-	float faceRotation = 0.0f; //Sept 10th
+	float rotation = 0.0f; //Sept 10th
 
 	while (!done) {
 		while (SDL_PollEvent(&event)) {
@@ -66,51 +172,48 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		float ticks = (float)SDL_GetTicks()/100.f; // Sept 10th
-		float elapsed = ticks - lastFrameTicks; //Sept 10th
-		lastFrameTicks = ticks; //Sept 10th
-		//faceRotation += 45.0f * elapsed; //Sept 10th
+		float ticks = (float)SDL_GetTicks() / 1000.0f;
+		float elapsed = ticks - lastFrameTicks;
+		int iTicks = (int)SDL_GetTicks() / 1000;
+		lastFrameTicks = ticks; 
+		rotation += 45.0f * elapsed;
 
-		glMatrixMode(GL_MODELVIEW); //Sept 8th -- called inside loop before transformations because when things get complex, we cant be positive the matrix hasnt been changed
+		glMatrixMode(GL_MODELVIEW);
+		glClearColor(0.5f, 1.0f, 0.2f, 0.0f); 
+		glClear(GL_COLOR_BUFFER_BIT); 
 
-		//glLoadIdentity(); //Sept 8th -- reset
-		//glTranslatef(1.0, 0.0, 0.0); //Sept 8th -- move right
-		//glLoadIdentity(); //Sept 8th
-		//glRotatef(45.0f, 0.0, 0.0, 1.0); //Sept 8th -- rortate 45 degrees  
-		//glLoadIdentity(); //Sept 8th
-		//glScalef(2.0, 1.0, 1.0); //Sept 8th -- scale (obviously)
 
-		//glLoadIdentity(); //Sept 10th
-		//glTranslatef(-0.5f, 0.0f, 0.0f); //Sept 10th
+		DrawWall(wall, 1.23f, -0.5f);
+		DrawRoadAcrossScreen(road);
+		DrawBackgroundImages(backgroundImages);
 
-		glClearColor(0.4f, 0.2f, 0.4f, 1.0f); //Sept 10th -- Sets clear color of the screen, purple in this example
-		glClear(GL_COLOR_BUFFER_BIT); //Sept 10th -- Clears screen to clear color
+		for (float i = -.9; i < 1.0; i += .3f){
+			DrawTriangle(1.18f, i, (rand() % 100) * .01f, (rand() % 100) * .01f, (rand() % 100) * .01f, rotation);
+		}
 
-		/*GLfloat triangle[] = { 0.0f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f }; //Sept 8th -- counter-clock wise
-		glVertexPointer(2, GL_FLOAT, 0, triangle); //Sept 8th -- size (how many points at each vertex), type, stride (how much to skip in array), array of vertex pos'n
-		glEnableClientState(GL_VERTEX_ARRAY);//Sept 8th -- lets GL know that the vertex array has been defined
-
-		GLfloat triangleColors[] = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 }; //Sept 10th
-		glColorPointer(3, GL_FLOAT, 0, triangleColors); //Sept 10th -- definies an array of vertex color data
-		glEnableClientState(GL_COLOR_ARRAY); //Sept 10th
-
-		glDrawArrays(GL_TRIANGLES, 0, 3); //Sept 8th -- self explanatory
-
-		glLoadIdentity(); //Sept 10th
-		glTranslatef(0.5f, 0.0f, 0.0f); //Sept 10th
-		glDisableClientState(GL_COLOR_ARRAY); //Sept 10th
-
-		GLfloat quad[] = { 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f }; //Sept 10th
-		glVertexPointer(2, GL_FLOAT, 0, quad); //Sept 10th
-		glEnableClientState(GL_VERTEX_ARRAY); //Sept 10th
-
-		//did texture stuff here //Sept 10th
-		//did blend stuff here //Sept 10th
-
-		glDrawArrays(GL_QUADS, 0, 4); //Sept 10th*/
-
-		DrawSprite(testTexture, 0.0, 0.0, 0.0);
-
+		if (moveRight)
+		{
+			for (float i = -0.9f; i < 1.0f; i += 0.3f){
+				DrawSprite(zombie, xPosition, i, 0.0f);
+			}
+			
+			xPosition += .005f;
+			if (xPosition > 1.03f)
+			{
+				moveRight = false;
+			}
+		}
+		else
+		{
+			for (float i = -0.9f; i < 1.0f; i += 0.3f){
+				DrawSprite(zombie, xPosition, i, 0.0f);
+			}
+			xPosition -= .005f;
+			if (xPosition < -1.23f)
+			{
+				moveRight = true;
+			}
+		}
 		SDL_GL_SwapWindow(displayWindow);
 	}
 

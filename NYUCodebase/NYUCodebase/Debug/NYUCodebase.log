@@ -1,13 +1,14 @@
-﻿Build started 9/10/2014 8:55:07 PM.
-     1>Project "C:\CS3113\project_template\Windows\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" on node 2 (Build target(s)).
+﻿Build started 9/11/2014 9:42:53 PM.
+     1>Project "C:\SamWeissmanCS3113\SamWeissmanCS3113\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\SDL2\include /IC:\SDL2_image\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
+     1>c:\samweissmancs3113\samweissmancs3113\nyucodebase\nyucodebase\main.cpp(190): warning C4305: 'initializing' : truncation from 'double' to 'float'
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\CS3113\project_template\Windows\NYUCodebase\Debug\NYUCodebase.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\SDL2\lib\x86 /LIBPATH:C:\SDL2_image\lib\x86 SDL2.lib SDL2main.lib SDL2_image.lib OpenGL32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\CS3113\project_template\Windows\NYUCodebase\Debug\NYUCodebase.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\CS3113\project_template\Windows\NYUCodebase\Debug\NYUCodebase.lib" /MACHINE:X86 Debug\main.obj
-         NYUCodebase.vcxproj -> C:\CS3113\project_template\Windows\NYUCodebase\Debug\NYUCodebase.exe
-     1>Done Building Project "C:\CS3113\project_template\Windows\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\SamWeissmanCS3113\SamWeissmanCS3113\NYUCodebase\Debug\NYUCodebase.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\SDL2\lib\x86 /LIBPATH:C:\SDL2_image\lib\x86 SDL2.lib SDL2main.lib SDL2_image.lib OpenGL32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\SamWeissmanCS3113\SamWeissmanCS3113\NYUCodebase\Debug\NYUCodebase.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\SamWeissmanCS3113\SamWeissmanCS3113\NYUCodebase\Debug\NYUCodebase.lib" /MACHINE:X86 Debug\main.obj
+         NYUCodebase.vcxproj -> C:\SamWeissmanCS3113\SamWeissmanCS3113\NYUCodebase\Debug\NYUCodebase.exe
+     1>Done Building Project "C:\SamWeissmanCS3113\SamWeissmanCS3113\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.19
+Time Elapsed 00:00:01.77
