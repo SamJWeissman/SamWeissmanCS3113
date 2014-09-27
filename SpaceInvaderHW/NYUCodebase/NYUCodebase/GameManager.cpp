@@ -145,7 +145,6 @@ void GameManager::processEvents(SDL_Event &event)
 				if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
 				{
 					player->resetScore();
-					player->clearBullets();
 					entityManager->getEntityAt(0)->setX(0.0f);
 					entityManager->firstWave();
 					waveCounter++;

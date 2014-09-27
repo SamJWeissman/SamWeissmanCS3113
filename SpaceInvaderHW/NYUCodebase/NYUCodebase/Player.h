@@ -21,7 +21,6 @@ public:
 	int getScore();
 	void resetScore();
 	void shoot();
-	void clearBullets();
 	const Uint8* getKeys();
 	void checkInputControls();
 	void setHealth(int health);

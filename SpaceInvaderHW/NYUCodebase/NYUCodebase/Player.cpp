@@ -89,15 +89,6 @@ void Player::shoot()
 	}
 }
 
-void Player::clearBullets()
-{
-	for (int i = 0; i < bullets.size(); i++)
-	{
-		bullets[i]->setX(0.0f);
-		bullets[i]->setY(-1.5f);
-	}
-}
-
 void Player::checkInputControls()
 {
 	if (keys[SDL_SCANCODE_LEFT] == 1)
