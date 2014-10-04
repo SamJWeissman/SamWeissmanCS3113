@@ -28,7 +28,7 @@ void EntityManager::spawnPrize(std::vector<Entity*> &prizes)
 {
 	if (rand() % 1000 > 975)
 	{
-		Entity* prize = new Entity(-2.66f + rand() % 532 * .01f, -.8f + rand() % 320 * .01f, 0.0f, 0.0f, .2f, 0.2f, 0.0f, 0.0f, true);
+		Entity* prize = new Entity(-2.66f + rand() % 532 * .01f, -.8f + rand() % 280 * .01f, 0.0f, 0.0f, .2f, 0.2f, 0.0f, 0.0f, true);
 		prizes.push_back(prize);
 	}
 }

@@ -93,7 +93,7 @@ void Player::collectPrize(std::vector<Entity*> &prizes)
 			{
 				health += 5;
 			}
-			if (rand() % 1000 > 850)
+			if (rand() % 1000 > 800)
 			{
 				energy += 50;
 			}
