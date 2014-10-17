@@ -14,7 +14,7 @@ public:
 	const Uint8* keys;
 	void Update(float elapsed);
 	void resetPlayerEnts();
-	void collectPrize(std::vector<Entity*> &prizes);
+	void collectPrize(std::vector<Entity*> &prizes, Entity *entity);
 	Entity* playerEntLegs;
 	Entity* playerEntTorso;
 	int health;

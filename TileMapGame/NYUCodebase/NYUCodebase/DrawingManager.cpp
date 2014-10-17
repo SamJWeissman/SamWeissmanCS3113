@@ -86,7 +86,8 @@ void DrawingManager::DrawStaticEntity(Entity* entity)
 void DrawingManager::DrawPrize(Entity* entity)
 {
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	//glLoadIdentity();
+	glPushMatrix();
 	glTranslatef(entity->x, entity->y, 0.0f);
 	Vertex2D quadData[4] = {
 			{ -entity->width / 2.0f, entity->height / 2.0f, 0.0f, 1.0f, 0.5f },
@@ -101,6 +102,7 @@ void DrawingManager::DrawPrize(Entity* entity)
 	glDrawArrays(GL_QUADS, 0, 4);
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_COLOR_ARRAY);
+	glPopMatrix();
 }
 
 void DrawingManager::DrawLavaBlob(Entity* entity)
@@ -188,8 +190,9 @@ void DrawingManager::DrawSomeText(std::string text, float x, float y, float size
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawArrays(GL_QUADS, 0, text.size() * 4);
+	
+	
 	glDisable(GL_TEXTURE_2D);
-
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -316,6 +319,10 @@ void DrawingManager::DrawTileLevel(unsigned char levelData[LEVEL_HEIGHT][LEVEL_W
 	glPushMatrix();
 	
 	int numOfVertices = 0;
+
+	std::vector<float> vertexData;
+	std::vector<float> texCoordData;
+	std::vector<float> colorData;
 
 	for (int y = 0; y < LEVEL_HEIGHT; y++)
 	{

@@ -1,27 +1,42 @@
-﻿Build started 10/15/2014 9:31:30 PM.
-     1>Project "C:\CS3113\CS3113\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" on node 2 (Build target(s)).
+﻿Build started 10/16/2014 10:50:18 PM.
+     1>Project "C:\SamWeissmanCS3113\TileMapGame\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\SDL2\include /IC:\SDL2_image\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GameManager.cpp main.cpp
-         GameManager.cpp
-     1>c:\cs3113\cs3113\nyucodebase\nyucodebase\gamemanager.cpp(73): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\cs3113\cs3113\nyucodebase\nyucodebase\gamemanager.cpp(171): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\cs3113\cs3113\nyucodebase\nyucodebase\gamemanager.cpp(199): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\cs3113\cs3113\nyucodebase\nyucodebase\gamemanager.cpp(254): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\cs3113\cs3113\nyucodebase\nyucodebase\gamemanager.cpp(267): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-         Generating Code...
-         Compiling...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\SDL2\include /IC:\SDL2_image\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DrawingManager.cpp Entity.cpp EntityManager.cpp GameManager.cpp main.cpp Player.cpp
+         Player.cpp
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\player.cpp(44): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\player.cpp(57): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\player.cpp(58): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\player.cpp(64): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\player.cpp(65): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\player.cpp(70): warning C4018: '<' : signed/unsigned mismatch
          main.cpp
+         GameManager.cpp
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\gamemanager.cpp(77): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\gamemanager.cpp(161): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\gamemanager.cpp(207): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\gamemanager.cpp(235): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\gamemanager.cpp(290): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\gamemanager.cpp(303): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+         EntityManager.cpp
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\entitymanager.cpp(18): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\entitymanager.cpp(35): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\entitymanager.cpp(35): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\entitymanager.cpp(45): warning C4018: '<' : signed/unsigned mismatch
+         Entity.cpp
+         DrawingManager.cpp
+     1>c:\samweissmancs3113\tilemapgame\nyucodebase\nyucodebase\drawingmanager.cpp(167): warning C4018: '<' : signed/unsigned mismatch
          Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\CS3113\CS3113\NYUCodebase\Debug\NYUCodebase.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\SDL2\lib\x86 /LIBPATH:C:\SDL2_image\lib\x86 SDL2.lib SDL2main.lib SDL2_image.lib OpenGL32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\CS3113\CS3113\NYUCodebase\Debug\NYUCodebase.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\CS3113\CS3113\NYUCodebase\Debug\NYUCodebase.lib" /MACHINE:X86 Debug\DrawingManager.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\SamWeissmanCS3113\TileMapGame\NYUCodebase\Debug\NYUCodebase.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\SDL2\lib\x86 /LIBPATH:C:\SDL2_image\lib\x86 SDL2.lib SDL2main.lib SDL2_image.lib OpenGL32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\SamWeissmanCS3113\TileMapGame\NYUCodebase\Debug\NYUCodebase.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\SamWeissmanCS3113\TileMapGame\NYUCodebase\Debug\NYUCodebase.lib" /MACHINE:X86 Debug\DrawingManager.obj
          Debug\Entity.obj
+         Debug\EntityManager.obj
          Debug\GameManager.obj
          Debug\main.obj
          Debug\Player.obj
      1>MSVCRTD.lib(cinitexe.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
-         NYUCodebase.vcxproj -> C:\CS3113\CS3113\NYUCodebase\Debug\NYUCodebase.exe
-     1>Done Building Project "C:\CS3113\CS3113\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" (Build target(s)).
+         NYUCodebase.vcxproj -> C:\SamWeissmanCS3113\TileMapGame\NYUCodebase\Debug\NYUCodebase.exe
+     1>Done Building Project "C:\SamWeissmanCS3113\TileMapGame\NYUCodebase\NYUCodebase\NYUCodebase.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:06.19
+Time Elapsed 00:00:12.99

@@ -42,9 +42,6 @@ public:
 	void DrawYouWin(int score);
 	void DrawTileLevel(unsigned char levelData[LEVEL_HEIGHT][LEVEL_WIDTH], float zone);
 
-	std::vector<float> vertexData;
-	std::vector<float> texCoordData;
-
 	GLuint fontTexture;
 	GLuint spriteSheetTexture;
 	GLuint levelSheetTexture;

@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Player.h"
 #include "DrawingManager.h"
+#include "EntityManager.h"
 #include <vector>
 
 #define LEVEL_HEIGHT 16
@@ -61,7 +62,9 @@ private:
 
 	Player* player;
 	DrawingManager* drawingMgr;
+	EntityManager* entityMgr;
 	std::vector<Entity*> entities;
+	std::vector<Entity*> prizes;
 	SDL_Window* displayWindow;
 
 };

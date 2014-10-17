@@ -48,7 +48,7 @@ void Player::checkInputControls()
 	if (keys[SDL_SCANCODE_SPACE])
 	{
 		if (energy > 0){
-			playerEntLegs->acceleration_y = 25.0f;
+			playerEntLegs->acceleration_y = 35.0f;
 			energy -= 5;
 		}
 	}
@@ -63,5 +63,23 @@ void Player::resetPlayerEnts()
 {
 	playerEntLegs->height = .15;
 	playerEntTorso->height = .075;
+}
+
+void Player::collectPrize(std::vector<Entity*> &prizes, Entity *entity)
+{
+	for (int i = 0; i < prizes.size(); i++)
+	{
+		if (playerEntTorso->collidesWith(prizes[i]) || playerEntLegs->collidesWith(prizes[i]))
+		{
+			prizes[i] = prizes[prizes.size() - 1];
+			prizes.pop_back();
+			entity->velocity_x -= .75f;
+			if (rand() % 100 > 75){
+				energy = 300;
+				playerEntLegs->velocity_y += 5.0f;
+				playerEntLegs->velocity_x += 3.0f;
+			}
+		}
+	}
 }
 

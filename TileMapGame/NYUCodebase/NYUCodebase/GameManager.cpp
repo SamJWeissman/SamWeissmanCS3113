@@ -55,11 +55,15 @@ void GameManager::setupGameVariables()
 	memcpy(runAnimation, runAnimationData, 25);
 
 	drawingMgr = new DrawingManager();
+	entityMgr = new EntityManager(player);
 	xZone = 0.0f;
 	entities.push_back(player->playerEntLegs);
 	previousX = -2.66f;
 	entities.push_back(player->playerEntTorso);
 	player->playerEntTorso->index = 99;
+	Entity *badGuy = new Entity(player->playerEntLegs->x - 2.66f, player->playerEntLegs->y, 0.0f, 0.0f, .3f, .3f, 19.5f, 0.0f, false);
+	badGuy->index = 80;
+	entities.push_back(badGuy);
 	numFrames = 5;
 	currentIndex = 0;
 	animationElapsed = 0.0f;
@@ -75,10 +79,12 @@ void GameManager::fixedUpdate()
 		entities[i]->FixedUpdate();
 		entities[i]->moveY();
 		//handleYPenetration(entities[i], entities);
-		checkYlevelCollision(entities[0]);
+		checkYlevelCollision(entities[i]);
 		entities[i]->moveX();
-		checkXlevelCollision(entities[0]);
-		//handleXPenetration(entities[i], entities);
+		if (i != 2){
+			checkXlevelCollision(entities[0]);
+		}
+		handleXPenetration(entities[0], entities);
 	}
 }
 
@@ -104,19 +110,21 @@ void GameManager::fixedLoop()
 void GameManager::update(float elapsed)
 {
 	player->Update(elapsed);
+	entities[2]->Update(elapsed);
+	player->collectPrize(prizes, entities[2]);
 	if (fabs(player->playerEntLegs->x - previousX) > 6.65f)
 	{
 		xZone += 6.65f;
-		obstacleVal = rand() % 1000; 
+		obstacleVal = rand() % 1000;
+		obstacle(obstacleVal);
 		previousX = player->playerEntLegs->x;
 	}
-	obstacle(obstacleVal); //this adds tiles which are detected by collision but are not rendered properly. I spent hours trying to figure out why and could not solve.
 	animationElapsed += elapsed;
 }
 
 void GameManager::render()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.0f, 0.1f, 0.7f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -125,21 +133,43 @@ void GameManager::render()
 	glTranslatef(-entities[0]->x, 0.0f, 0.0f);
 	drawingMgr->DrawTileLevel(levelData, xZone);
 	drawingMgr->DrawSheetSpriteUniform(player->playerEntTorso, player->playerEntTorso->index);
-	if (player->playerEntLegs->y < -1.0f){
-		if (animationElapsed > 1.0 / 30.0f) {
-			currentIndex++;
-			animationElapsed = 0.0;
-			if (currentIndex > numFrames - 1) {
-				currentIndex = 0;
-			}
+	if (animationElapsed > 1.0 / 30.0f) 
+	{
+		currentIndex++;
+		animationElapsed = 0.0;
+		if (currentIndex > numFrames - 1) 
+		{
+			currentIndex = 0;
 		}
-		drawingMgr->DrawSheetSpriteUniform(player->playerEntLegs, runAnimation[currentIndex]);
 	}
-	else
+	if (player->playerEntLegs->y > -1.0f)
 	{
 		drawingMgr->DrawSheetSpriteUniform(player->playerEntLegs, runAnimation[2]);
 	}
-
+	else
+	{
+		drawingMgr->DrawSheetSpriteUniform(player->playerEntLegs, runAnimation[currentIndex]);
+	}
+	if (currentIndex % 2 != 0)
+	{
+		drawingMgr->DrawSheetSpriteUniform(entities[2], entities[2]->index);
+	}
+	else
+	{
+		drawingMgr->DrawSheetSpriteUniform(entities[2], entities[2]->index + 1);
+	}
+	for (int i = 0; i < prizes.size(); i++)
+	{
+		drawingMgr->DrawPrize(prizes[i]);
+	}
+	if (player->energy > 0 && player->energy < 200)
+	{
+		drawingMgr->DrawSomeText("LOW ENERGY", player->playerEntLegs->x - 2.0f, 1.5f, .5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+	}
+	else if (player->energy <= 0)
+	{
+		drawingMgr->DrawSomeText("NO ENERGY", player->playerEntLegs->x - 1.75f, 1.5f, .5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+	}
 	player->resetPlayerEnts();
 	SDL_GL_SwapWindow(displayWindow);
 }
@@ -161,6 +191,12 @@ void GameManager::processEvents(SDL_Event &event)
 			gameOver = true;
 		}
 	}
+	if (entities[0]->x <= entities[2]->x)
+	{
+		gameOver = true;
+	}
+
+	entityMgr->spawnPrize(prizes);
 	player->checkInputControls();
 }
 
@@ -272,7 +308,7 @@ float GameManager::pointAndGridCollisionYaxis(float x, float y)
 
 void GameManager::checkXlevelCollision(Entity* entity)
 {
-	float xPenetration = pointAndGridCollisionXaxis(entity->x - xZone - entity->width, entity->y);
+	float xPenetration = pointAndGridCollisionXaxis(entity->x - xZone - entity->width, entity->y + .1f);
 	if (xPenetration != 0.0f)
 	{
 		entity->x += xPenetration;
@@ -280,13 +316,12 @@ void GameManager::checkXlevelCollision(Entity* entity)
 		entity->collidedLeft = true;
 	}
 
-	xPenetration = pointAndGridCollisionXaxis(entity->x - xZone + (entity->width / 2.0f), entity->y);
+	xPenetration = pointAndGridCollisionXaxis(entity->x - xZone + (entity->width / 2.0f), entity->y + .1f);
 	if (xPenetration != 0.0f)
 	{
 		entity->x += xPenetration - (TILE_SIZE);
 		entity->velocity_x = 0.0f;
 		entity->collidedRight = true;
-		//gameOver = true; WILL ADD THIS IN ONCE I CAN ACTUALLY SEE THE TILES BEING RENDERED
 	}
 }
 
@@ -311,25 +346,37 @@ void GameManager::checkYlevelCollision(Entity* entity)
 
 void GameManager::obstacle(int x)
 {
-	if (0 <= x && x < 200 )
+	if (0 <= x && x < 100 )
 	{
 		levelData[12][32] = 4;
 		levelData[11][32] = 0;
 		levelData[10][32] = 0;
+		levelData[9][32] = 0;
+		levelData[8][32] = 0;
+		levelData[7][32] = 0;
+		levelData[6][32] = 0;
 	}
-	else if (200 <= x && x < 400)
+	else if (100 <= x && x < 200)
 	{
 		levelData[12][32] = 4;
 		levelData[11][32] = 4;
 		levelData[10][32] = 0;
+		levelData[9][32] = 0;
+		levelData[8][32] = 0;
+		levelData[7][32] = 0;
+		levelData[6][32] = 0;
 	}
-	else if(400 <= x && x < 600)
+	else if(200 <= x && x < 300)
 	{
 		levelData[12][32] = 4;
 		levelData[11][32] = 4;
 		levelData[10][32] = 4;
+		levelData[9][32] = 0;
+		levelData[8][32] = 0;
+		levelData[7][32] = 0;
+		levelData[6][32] = 0;
 	}
-	else if (600 <= x && x < 800)
+	else if (300 <= x && x < 400)
 	{
 		levelData[12][32] = 4;
 		levelData[11][32] = 4;
@@ -337,8 +384,9 @@ void GameManager::obstacle(int x)
 		levelData[9][32] = 0;
 		levelData[8][32] = 4;
 		levelData[7][32] = 4;
+		levelData[6][32] = 0;
 	}
-	else if (800 <= x && x < 1000)
+	else if (400 <= x && x < 500)
 	{
 		levelData[12][32] = 4;
 		levelData[11][32] = 0;
@@ -347,5 +395,55 @@ void GameManager::obstacle(int x)
 		levelData[8][32] = 0;
 		levelData[7][32] = 0;
 		levelData[6][32] = 4;
+	}
+	else if (500 <= x && x < 600)
+	{
+		levelData[12][32] = 0;
+		levelData[11][32] = 4;
+		levelData[10][32] = 4;
+		levelData[9][32] = 4;
+		levelData[8][32] = 4;
+		levelData[7][32] = 4;
+		levelData[6][32] = 4;
+	}
+	else if (600 <= x && x < 700)
+	{
+		levelData[12][32] = 4;
+		levelData[11][32] = 4;
+		levelData[10][32] = 4;
+		levelData[9][32] = 0;
+		levelData[8][32] = 4;
+		levelData[7][32] = 4;
+		levelData[6][32] = 4;
+	}
+	else if (700 <= x && x < 800)
+	{
+		levelData[12][32] = 0;
+		levelData[11][32] = 4;
+		levelData[10][32] = 4;
+		levelData[9][32] = 4;
+		levelData[8][32] = 4;
+		levelData[7][32] = 4;
+		levelData[6][32] = 4;
+	}
+	else if (800 <= x && x < 900)
+	{
+		levelData[12][32] = 0;
+		levelData[11][32] = 0;
+		levelData[10][32] = 4;
+		levelData[9][32] = 4;
+		levelData[8][32] = 4;
+		levelData[7][32] = 4;
+		levelData[6][32] = 4;
+	}
+	else if (900 <= x && x < 1000)
+	{
+		levelData[12][32] = 0;
+		levelData[11][32] = 0;
+		levelData[10][32] = 4;
+		levelData[9][32] = 4;
+		levelData[8][32] = 4;
+		levelData[7][32] = 0;
+		levelData[6][32] = 0;
 	}
 }
