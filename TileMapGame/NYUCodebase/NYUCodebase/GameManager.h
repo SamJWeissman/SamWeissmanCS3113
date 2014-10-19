@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "DrawingManager.h"
 #include "EntityManager.h"
+#include <SDL_mixer.h>
 #include <vector>
 
 #define LEVEL_HEIGHT 16
@@ -58,6 +59,8 @@ private:
 	unsigned int runAnimation[5];
 	float animationElapsed;
 	float framesPerSecond;
+	Mix_Chunk *jetPack;
+	Mix_Chunk *collectPrize;
 	unsigned char levelData[LEVEL_HEIGHT][LEVEL_WIDTH];
 
 	Player* player;

@@ -20,6 +20,8 @@ public:
 	int health;
 	int score;
 	int energy;
+	bool jetPack;
+	bool collectedPrize;
 };
 
 #endif

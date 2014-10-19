@@ -12,12 +12,15 @@
 
 enum GAMESTATE { STATE_START_SCREEN, STATE_GAME_RUNNING, STATE_GAME_LOSE };
 
-GameManager::GameManager(){}
+GameManager::GameManager(){
+
+}
 
 GameManager::~GameManager(){}
 
 void GameManager::init()
 {
+
 	setupGL();
 	setupGameVariables();
 }
@@ -36,6 +39,10 @@ void GameManager::setupGL()
 
 void GameManager::setupGameVariables()
 {
+	state = STATE_START_SCREEN;
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+	jetPack = Mix_LoadWAV("jet_pack.wav");
+	collectPrize = Mix_LoadWAV("prize.wav");
 	gameOver = false;
 	lastFrameTicks = 0.0f;
 	elapsed = 0.0f;
@@ -56,7 +63,6 @@ void GameManager::setupGameVariables()
 
 	drawingMgr = new DrawingManager();
 	entityMgr = new EntityManager(player);
-	xZone = 0.0f;
 	entities.push_back(player->playerEntLegs);
 	previousX = -2.66f;
 	entities.push_back(player->playerEntTorso);
@@ -90,36 +96,47 @@ void GameManager::fixedUpdate()
 
 void GameManager::fixedLoop()
 {
-	ticks = (float)SDL_GetTicks() / 1000.0f;
-	elapsed = ticks - lastFrameTicks;
-	lastFrameTicks = ticks;
-	timer += elapsed;
+	if (state == STATE_GAME_RUNNING)
+	{
+		ticks = (float)SDL_GetTicks() / 1000.0f;
+		elapsed = ticks - lastFrameTicks;
+		lastFrameTicks = ticks;
+		timer += elapsed;
 
-	float fixedElapsed = elapsed + timeLeftOver;
-	if (fixedElapsed > FIXED_TIMESTEP * MAX_TIMESTEPS) {
-		fixedElapsed = FIXED_TIMESTEP * MAX_TIMESTEPS;
-	}
+		float fixedElapsed = elapsed + timeLeftOver;
+		if (fixedElapsed > FIXED_TIMESTEP * MAX_TIMESTEPS) {
+			fixedElapsed = FIXED_TIMESTEP * MAX_TIMESTEPS;
+		}
 
-	while (fixedElapsed >= FIXED_TIMESTEP) {
-		fixedElapsed -= FIXED_TIMESTEP;
-		fixedUpdate();
+		while (fixedElapsed >= FIXED_TIMESTEP) {
+			fixedElapsed -= FIXED_TIMESTEP;
+			fixedUpdate();
+		}
+		timeLeftOver = fixedElapsed;
 	}
-	timeLeftOver = fixedElapsed;
 }
 
 void GameManager::update(float elapsed)
 {
-	player->Update(elapsed);
-	entities[2]->Update(elapsed);
-	player->collectPrize(prizes, entities[2]);
-	if (fabs(player->playerEntLegs->x - previousX) > 6.65f)
+	if (state == STATE_GAME_RUNNING)
 	{
-		xZone += 6.65f;
-		obstacleVal = rand() % 1000;
-		obstacle(obstacleVal);
-		previousX = player->playerEntLegs->x;
+		player->Update(elapsed);
+		entities[2]->Update(elapsed);
+		player->collectPrize(prizes, entities[2]);
+		if (player->collectedPrize)
+		{
+			Mix_PlayChannel(-1, collectPrize, 0);
+			player->collectedPrize = false;
+		}
+		if (fabs(player->playerEntLegs->x - previousX) > 6.65f)
+		{
+			xZone += 6.65f;
+			obstacleVal = rand() % 1000;
+			obstacle(obstacleVal);
+			previousX = player->playerEntLegs->x;
+		}
+		animationElapsed += elapsed;
 	}
-	animationElapsed += elapsed;
 }
 
 void GameManager::render()
@@ -129,22 +146,30 @@ void GameManager::render()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	
+
 	drawingMgr->DrawStatBoard(player->energy, player->score);
 	glTranslatef(-entities[0]->x, 0.0f, 0.0f);
 	drawingMgr->DrawTileLevel(levelData, xZone);
 	drawingMgr->DrawSheetSpriteUniform(player->playerEntTorso, player->playerEntTorso->index);
-	if (animationElapsed > 1.0 / 30.0f) 
+	if (animationElapsed > 1.0 / 30.0f)
 	{
 		currentIndex++;
 		animationElapsed = 0.0;
-		if (currentIndex > numFrames - 1) 
+		if (currentIndex > numFrames - 1)
 		{
 			currentIndex = 0;
 		}
 	}
-	if (player->playerEntLegs->y > -1.0f)
+	if (player->jetPack)//(player->playerEntLegs->y > -1.0f)
 	{
 		drawingMgr->DrawSheetSpriteUniform(player->playerEntLegs, runAnimation[2]);
+		Mix_PlayChannel(-1, jetPack, 0);
+		for (int i = 0; i < 5; i++)
+		{
+			drawingMgr->DrawRocketBoost(player->playerEntLegs->x - (i * .05f), player->playerEntLegs->y - (i * .05f));
+		}
+		player->jetPack = false;
 	}
 	else
 	{
@@ -171,6 +196,29 @@ void GameManager::render()
 		drawingMgr->DrawSomeText("NO ENERGY", player->playerEntLegs->x - 1.75f, 1.5f, .5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 	}
 	player->resetPlayerEnts();
+
+	SDL_GL_SwapWindow(displayWindow);
+}
+
+void GameManager::renderGameLost()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	drawingMgr->DrawYouLose(player->score, xZone);
+
+	SDL_GL_SwapWindow(displayWindow);
+}
+
+void GameManager::renderStartScreen()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	drawingMgr->DrawStartScreen();
+
 	SDL_GL_SwapWindow(displayWindow);
 }
 
@@ -178,7 +226,17 @@ void GameManager::updateAndRender()
 {
 	fixedLoop();
 	update(elapsed);
-	render();
+	if (state == STATE_GAME_RUNNING){
+		render();
+	}
+	else if (state == STATE_GAME_LOSE)
+	{
+		renderGameLost();
+	}
+	else
+	{
+		renderStartScreen();
+	}
 }
 
 void GameManager::processEvents(SDL_Event &event)
@@ -189,15 +247,40 @@ void GameManager::processEvents(SDL_Event &event)
 		if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE)
 		{
 			gameOver = true;
+			Mix_FreeChunk(jetPack);
+			Mix_FreeChunk(collectPrize);
+		}
+		else if (event.type == SDL_KEYDOWN)
+		{
+			if (event.key.keysym.scancode == SDL_SCANCODE_UP)
+			{
+				if (state == STATE_GAME_LOSE || state == STATE_START_SCREEN)
+				{
+					player->score = 0;
+					entities.pop_back();
+					player->playerEntLegs->x -= (xZone - 2.66f);
+					xZone = 0.0f;
+					player->playerEntLegs->y = 2.0f;
+					Entity *badGuy = new Entity(player->playerEntLegs->x - 2.66f, player->playerEntLegs->y, 0.0f, 0.0f, .3f, .3f, 19.5f, 0.0f, false);
+					badGuy->index = 80;
+					entities.push_back(badGuy);
+					state = STATE_GAME_RUNNING;
+					lastFrameTicks = (float)SDL_GetTicks() / 1000.0f;
+				}
+			}
 		}
 	}
-	if (entities[0]->x <= entities[2]->x)
+	
+	if (state == STATE_GAME_RUNNING)
 	{
-		gameOver = true;
-	}
+		entityMgr->spawnPrize(prizes);
+		player->checkInputControls();
 
-	entityMgr->spawnPrize(prizes);
-	player->checkInputControls();
+		if (entities[0]->x <= entities[2]->x)
+		{
+			state = STATE_GAME_LOSE;
+		}
+	}
 }
 
 void GameManager::handleYPenetration(Entity* entity, std::vector<Entity*> entities)
@@ -344,19 +427,11 @@ void GameManager::checkYlevelCollision(Entity* entity)
 	}
 }
 
+
+
 void GameManager::obstacle(int x)
 {
-	if (0 <= x && x < 100 )
-	{
-		levelData[12][32] = 4;
-		levelData[11][32] = 0;
-		levelData[10][32] = 0;
-		levelData[9][32] = 0;
-		levelData[8][32] = 0;
-		levelData[7][32] = 0;
-		levelData[6][32] = 0;
-	}
-	else if (100 <= x && x < 200)
+	if (0 <= x && x < 200)
 	{
 		levelData[12][32] = 4;
 		levelData[11][32] = 4;
@@ -389,7 +464,7 @@ void GameManager::obstacle(int x)
 	else if (400 <= x && x < 500)
 	{
 		levelData[12][32] = 4;
-		levelData[11][32] = 0;
+		levelData[11][32] = 4;
 		levelData[10][32] = 0;
 		levelData[9][32] = 4;
 		levelData[8][32] = 0;

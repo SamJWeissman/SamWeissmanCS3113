@@ -30,6 +30,7 @@ public:
 	void DrawStaticEntity(Entity* entity);
 	void DrawPrize(Entity* entity);
 	void DrawLavaBlob(Entity* entity);
+	void DrawRocketBoost(float x, float y);
 	void DrawSomeText(std::string text, float x, float y, float size, float spacing, float r, float g, float b, float a);
 	void DrawSprite(GLuint texture, float x, float y, float width, float height, float rotation);
 	void DrawSheetSpriteNonUniform(Entity* entity);
@@ -38,7 +39,7 @@ public:
 	GLuint LoadTexture(const char *img_path);
 	void DrawStatBoard(int energy, int score);
 	void DrawStartScreen();
-	void DrawYouLose(int score);
+	void DrawYouLose(int score, float xZone);
 	void DrawYouWin(int score);
 	void DrawTileLevel(unsigned char levelData[LEVEL_HEIGHT][LEVEL_WIDTH], float zone);
 

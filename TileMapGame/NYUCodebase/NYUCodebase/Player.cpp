@@ -50,6 +50,7 @@ void Player::checkInputControls()
 		if (energy > 0){
 			playerEntLegs->acceleration_y = 35.0f;
 			energy -= 5;
+			jetPack = true;
 		}
 	}
 	if (keys[SDL_SCANCODE_DOWN])
@@ -73,11 +74,12 @@ void Player::collectPrize(std::vector<Entity*> &prizes, Entity *entity)
 		{
 			prizes[i] = prizes[prizes.size() - 1];
 			prizes.pop_back();
-			entity->velocity_x -= .75f;
+			score += 500;
+			collectedPrize = true;
 			if (rand() % 100 > 75){
 				energy = 300;
-				playerEntLegs->velocity_y += 5.0f;
-				playerEntLegs->velocity_x += 3.0f;
+				playerEntLegs->velocity_y += 10.0f;
+				playerEntLegs->velocity_x += 5.0f;
 			}
 		}
 	}

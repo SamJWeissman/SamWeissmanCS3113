@@ -125,6 +125,28 @@ void DrawingManager::DrawLavaBlob(Entity* entity)
 	glDisable(GL_COLOR_ARRAY);
 }
 
+void DrawingManager::DrawRocketBoost(float x, float y)
+{
+	glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	glPushMatrix();
+	glTranslatef(x - (.08f + rand() % 10 * .01f), y - (.08f + rand() % 10 * .01f), 0.0f);
+	Vertex2D quadData[4] = {
+			{ -.05f, .05f, 1.0f, rand() % 100 * .01f, 0.5f },
+			{ -.05f, -.05f, 1.0f, rand() % 100 * .01f, 0.5f },
+			{ .05f, -.05f, 1.0f, rand() % 100 * .01f, 0.5f },
+			{ .05f, .05f, 1.0f, rand() % 100 * .01f, 0.5f }
+	};
+	glVertexPointer(2, GL_FLOAT, sizeof(float) * 5, quadData);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColorPointer(3, GL_FLOAT, sizeof(float) * 5, &quadData[0].r);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glDrawArrays(GL_QUADS, 0, 4);
+	glDisable(GL_VERTEX_ARRAY);
+	glDisable(GL_COLOR_ARRAY);
+	glPopMatrix();
+}
+
 void DrawingManager::DrawSprite(GLuint texture, float x, float y, float width, float height, float rotation)
 {
 	glEnable(GL_TEXTURE_2D);
@@ -279,27 +301,27 @@ void DrawingManager::DrawStatBoard(int energy, int score)
 	DrawSomeText("Energy: " + std::to_string(energy), 1.1f, 1.96f, 0.15f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-/*void DrawingManager::DrawStartScreen()
+void DrawingManager::DrawStartScreen()
 {
 	DrawSomeText("SAM WEISSMAN", -1.0f, 1.2f, 0.15f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	DrawSomeText("PRESENTS", -0.8f, 1.1f, 0.15f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	DrawSomeText("MAGMA HOPPER", -1.0f, 1.0f, 0.15f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+	DrawSomeText("ROCKET RUNNER", -1.0f, 1.0f, 0.15f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f);
 	DrawSomeText("PRESS UP ARROW", -1.1f, .9f, 0.15f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 	DrawSomeText("TO PLAY", -0.7f, .8f, 0.15f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	DrawSomeText("SPACEBAR: FLY", -2.64f, -1.95f, 0.15f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
-	DrawSomeText("RT/LT ARROW: DIRECTION", -0.2f, -1.95f, 0.15f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
+	DrawSomeText("SPACEBAR: FLY", -2.64f, -1.95f, 0.15f, -0.02f, 0.0f, 1.0f, 0.0f, 1.0f);
+	DrawSomeText("DOWN ARROW: CROUCH", 0.2f, -1.95f, 0.15f, -0.02f, 0.0f, 1.0f, 0.0f, 1.0f);
 	DrawSomeText("Flying uses energy until it reaches 0.", -1.3f, -.6f, 0.1f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
-	DrawSomeText("After energy runs out, health decreases.", -1.4f, -.75f, 0.1f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
+	DrawSomeText("After energy runs out, jetpack stops.", -1.4f, -.75f, 0.1f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
 	DrawSomeText("Land for faster energy recharge.", -1.2f, -.9f, 0.1f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
-	DrawSomeText("Collect greens for score (and possible health or energy)", -2.0f, -1.05f, 0.1f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
+	DrawSomeText("Collect greens for score and a possible boost!", -2.0f, -1.05f, 0.1f, -0.02f, 1.0f, 1.0f, 0.0f, 1.0f);
 }
-void DrawingManager::DrawYouLose(int score)
+void DrawingManager::DrawYouLose(int score, float xZone)
 {
-	DrawSomeText("FINAL SCORE", -1.0f, 0.9f, 0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	DrawSomeText(std::to_string(score), -0.2f, 0.8f, 0.2f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-	DrawSomeText("YOU LOSE", -0.9f, 0.1f, 0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	DrawSomeText("TO TRY AGAIN", -1.1f, 0.0f, 0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	DrawSomeText("PRESS UP ARROW", -1.2f, -0.1f, 0.2f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+	DrawSomeText("FINAL SCORE", -1.0f + xZone, 0.9f, 0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	DrawSomeText(std::to_string(score), -0.2f + xZone, 0.8f, 0.2f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+	DrawSomeText("YOU LOSE", -0.9f + xZone, 0.1f, 0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	DrawSomeText("TO TRY AGAIN", -1.1f + xZone, 0.0f, 0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	DrawSomeText("PRESS UP ARROW", -1.2f + xZone, -0.1f, 0.2f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 }
 /*void DrawingManager::DrawYouWin(int score)
 {
