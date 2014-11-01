@@ -2,7 +2,8 @@
 #define _VECTOR_H_
 #include "Math.h"
 
-class Vector{
+class Vector
+{
 public:
 	Vector();
 	Vector(float x, float y, float z);

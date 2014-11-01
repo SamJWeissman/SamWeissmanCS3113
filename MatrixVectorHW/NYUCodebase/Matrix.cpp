@@ -71,7 +71,8 @@ Matrix Matrix::inverse()
 	return m2;
 }
 
-Matrix Matrix::operator*(const Matrix &n){
+Matrix Matrix::operator*(const Matrix &n)
+{
 	float m00 = m[0][0], m01 = m[0][1], m02 = m[0][2], m03 = m[0][3];
 	float m10 = m[1][0], m11 = m[1][1], m12 = m[1][2], m13 = m[1][3];
 	float m20 = m[2][0], m21 = m[2][1], m22 = m[2][2], m23 = m[2][3];
@@ -82,29 +83,29 @@ Matrix Matrix::operator*(const Matrix &n){
 	float n20 = n.m[2][0], n21 = n.m[2][1], n22 = n.m[2][2], n23 = n.m[2][3];
 	float n30 = n.m[3][0], n31 = n.m[3][1], n32 = n.m[3][2], n33 = n.m[3][3];
 
-	Matrix* retM = new Matrix();
+	Matrix retM;
 
-	retM->m[0][0] = (m00 * n00) + (m01 * n10) + (m02 * n20) + (m03 * n30);
-	retM->m[0][1] = (m00 * n01) + (m01 * n11) + (m02 * n21) + (m03 * n31);
-	retM->m[0][2] = (m00 * n02) + (m01 * n12) + (m02 * n22) + (m03 * n32);
-	retM->m[0][3] = (m00 * n03) + (m01 * n13) + (m02 * n23) + (m03 * n33);
+	retM.m[0][0] = (m00 * n00) + (m10 * n01) + (m20 * n02) + (m30 * n03);
+	retM.m[1][0] = (m00 * n10) + (m10 * n11) + (m20 * n12) + (m30 * n13);
+	retM.m[2][0] = (m00 * n20) + (m10 * n21) + (m20 * n22) + (m30 * n23);
+	retM.m[3][0] = (m00 * n30) + (m10 * n31) + (m20 * n32) + (m30 * n33);
 
-	retM->m[1][0] = (m10 * n00) + (m11 * n10) + (m12 * n20) + (m13 * n30);
-	retM->m[1][1] = (m10 * n01) + (m11 * n11) + (m12 * n21) + (m13 * n31);
-	retM->m[1][2] = (m10 * n02) + (m11 * n12) + (m12 * n22) + (m13 * n32);
-	retM->m[1][3] = (m10 * n03) + (m11 * n13) + (m12 * n23) + (m13 * n33);
+	retM.m[0][1] = (m01 * n00) + (m11 * n01) + (m21 * n02) + (m31 * n03);
+	retM.m[1][1] = (m01 * n10) + (m11 * n11) + (m21 * n12) + (m31 * n13);
+	retM.m[2][1] = (m01 * n20) + (m11 * n21) + (m21 * n22) + (m31 * n23);
+	retM.m[3][1] = (m01 * n30) + (m11 * n31) + (m21 * n32) + (m31 * n33);
 
-	retM->m[1][0] = (m20 * n00) + (m21 * n10) + (m22 * n20) + (m23 * n30);
-	retM->m[1][1] = (m20 * n01) + (m21 * n11) + (m22 * n21) + (m23 * n31);
-	retM->m[1][2] = (m20 * n02) + (m21 * n12) + (m22 * n22) + (m23 * n32);
-	retM->m[1][3] = (m20 * n03) + (m21 * n13) + (m22 * n23) + (m23 * n33);
+	retM.m[0][2] = (m02 * n00) + (m12 * n01) + (m22 * n02) + (m32 * n03);
+	retM.m[1][2] = (m02 * n10) + (m12 * n11) + (m22 * n12) + (m32 * n13);
+	retM.m[2][2] = (m02 * n20) + (m12 * n21) + (m22 * n22) + (m32 * n23);
+	retM.m[3][2] = (m02 * n30) + (m12 * n31) + (m22 * n32) + (m32 * n33);
 
-	retM->m[1][0] = (m30 * n00) + (m31 * n10) + (m32 * n20) + (m33 * n30);
-	retM->m[1][1] = (m30 * n01) + (m31 * n11) + (m32 * n21) + (m33 * n31);
-	retM->m[1][2] = (m30 * n02) + (m31 * n12) + (m32 * n22) + (m33 * n32);
-	retM->m[1][3] = (m30 * n03) + (m31 * n13) + (m32 * n23) + (m33 * n33);
+	retM.m[0][3] = (m03 * n00) + (m13 * n01) + (m23 * n02) + (m33 * n03);
+	retM.m[1][3] = (m03 * n10) + (m13 * n11) + (m23 * n12) + (m33 * n13);
+	retM.m[2][3] = (m03 * n20) + (m13 * n21) + (m23 * n22) + (m33 * n23);
+	retM.m[3][3] = (m03 * n30) + (m13 * n31) + (m23 * n32) + (m33 * n33);
 
-	return *retM;
+	return retM;
 }
 
 Vector Matrix::operator*(const Vector &v)
@@ -114,11 +115,34 @@ Vector Matrix::operator*(const Vector &v)
 	float m20 = m[2][0], m21 = m[2][1], m22 = m[2][2], m23 = m[2][3];
 	float m30 = m[3][0], m31 = m[3][1], m32 = m[3][2], m33 = m[3][3];
 
-	Vector* retV = new Vector();
+	Vector retV;
 
-	retV->x = (m00 * v.x) + (m01 * v.y) + (m02 * v.z) + (m03 * 1);
-	retV->y = (m10 * v.x) + (m11 * v.y) + (m12 * v.z) + (m13 * 1);
-	retV->z = (m20 * v.x) + (m21 * v.y) + (m22 * v.z) + (m23 * 1);
+	retV.x = (m00 * v.x) + (m10 * v.y) + (m20 * v.z) + (m30 * 1);
+	retV.y = (m01 * v.x) + (m11 * v.y) + (m21 * v.z) + (m31 * 1);
+	retV.z = (m02 * v.x) + (m12 * v.y) + (m22 * v.z) + (m32 * 1);
 
-	return *retV;
+	return retV;
+}
+
+void Matrix::identity()
+{
+	m[0][0] = 1;
+	m[0][1] = 0;
+	m[0][2] = 0;
+	m[0][3] = 0;
+
+	m[1][0] = 0;
+	m[1][1] = 1;
+	m[1][2] = 0;
+	m[1][3] = 0;
+
+	m[2][0] = 0;
+	m[2][1] = 0;
+	m[2][2] = 1;
+	m[2][3] = 0;
+
+	m[3][0] = 0;
+	m[3][1] = 0;
+	m[3][2] = 0;
+	m[3][3] = 1;
 }

@@ -3,7 +3,8 @@
 
 #include "Vector.h"
 
-class Matrix {
+class Matrix 
+{
 public:
 	Matrix();
 	union {

@@ -72,13 +72,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DrawingManager.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DrawingManager.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Vector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="arne_sprites.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
