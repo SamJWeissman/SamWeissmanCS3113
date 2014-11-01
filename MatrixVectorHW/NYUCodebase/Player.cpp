@@ -12,9 +12,6 @@ Player::Player(DrawingManager* drawingMgr)
 	ship->velocity_y = 0.0f;
 	ship->x = 0.0f;
 	ship->y = 0.0f;
-	//ship->vector.x = 0.0f;
-	//ship->vector.y = 0.0f;
-	//ship->vector.z = 0.0f;
 	ship->width = .2f;
 	ship->height = .2f;
 	ship->scale_x = 1.0f;
@@ -29,10 +26,6 @@ Player::Player(DrawingManager* drawingMgr)
 
 void Player::Update(float elapsed)
 {
-	//if (ship->acceleration_x >= 0.0f)ship->acceleration_x -= 0.8f;
-	//if (ship->acceleration_x <= 0.0f)ship->acceleration_x += 0.8f;
-	//if(ship->acceleration_y >= 0.0f) ship->acceleration_y -= 0.8f;
-	//if (ship->acceleration_y <= 0.0f)ship->acceleration_y += 0.8f;
 	ship->velocity_x = 0.0f;
 	ship->velocity_y = 0.0f;
 }
@@ -53,16 +46,10 @@ void Player::checkInputControls(float elapsed)
 	}
 	if (keys[SDL_SCANCODE_LEFT])
 	{
-		//ship->acceleration_x -= 1.0f;
-		//ship->acceleration_x += 2.0f;
-		//if (ship->angle >= 360.0f) ship->angle = 0.0f;
 		ship->rotation += 1.0f * FIXED_TIMESTEP;
 	}
 	if (keys[SDL_SCANCODE_RIGHT])
 	{
-		//ship->acceleration_x += 1.0f;
-		//ship->acceleration_x += 2.0f;
-		//if (ship->angle <= -360.0f) ship->angle = 0.0f;
 		ship->rotation -= 1.0f * FIXED_TIMESTEP;
 	}
 }

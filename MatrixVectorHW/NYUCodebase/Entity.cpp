@@ -10,9 +10,6 @@ Entity::Entity(DrawingManager* drawingManager) : drawingMgr(drawingManager)
 	velocity_y = 0.0f;
 	x = -0.5f + rand() % 10 * .1f;
 	y = -0.5f + rand() % 10 * .1f;
-	//vector.x = x;
-	//vector.y = y;
-	//vector.z = 0.0f;
 	width = .2f + rand() % 3 * .1f;
 	height = .2f + rand() % 3 * .1f;
 	scale_x = 1.0f;
@@ -57,7 +54,7 @@ float Entity::lerp(float v0, float v1, float t)
 	return (1.0f - t) * v0 + t * v1;
 }
 
-void Entity::moveY()
+/*void Entity::moveY()
 {
 	y += cos(rotation * PI / 180.0f ) * velocity_y * FIXED_TIMESTEP;
 
@@ -73,7 +70,7 @@ void Entity::moveY()
 
 void Entity::moveX()
 {
-	x += sin(rotation * PI / 180.0f) * velocity_y * FIXED_TIMESTEP;
+	x += sin(rotation * PI / 180.0f) * velocity_x * FIXED_TIMESTEP;
 
 	if (x - width > 2.66f)
 	{
@@ -83,20 +80,12 @@ void Entity::moveX()
 	{
 		x = 2.66f;
 	}
-}
+}*/
 
 void Entity::movePlayer()
 {
-	//Vector v;
-	velocity.x += sin(rotation * PI / 180.0f) * velocity_y * FIXED_TIMESTEP;
-	velocity.y += cos(rotation * PI / 180.0f) * velocity_y * FIXED_TIMESTEP;
-	//velocity.x = velocity_x;
-	//velocity.y = velocity_y;
-	//v.z = 0.0f;
-
-//	v = matrix * v;
-	//x += v.x;
-	//y += v.y;
+	x += sin(rotation * PI / 180.0f) * velocity_x * FIXED_TIMESTEP;
+	y += cos(rotation * PI / 180.0f) * velocity_y * FIXED_TIMESTEP;
 }
 
 void Entity::buildMatrix()
@@ -164,8 +153,8 @@ void Entity::buildMatrix()
 	tmp.m[2][2] = 1;
 	tmp.m[2][3] = 0;
 
-	tmp.m[3][0] = velocity.x;
-	tmp.m[3][1] = velocity.y;
+	tmp.m[3][0] = x;
+	tmp.m[3][1] = y;
 	tmp.m[3][2] = 0;
 	tmp.m[3][3] = 1;
 
