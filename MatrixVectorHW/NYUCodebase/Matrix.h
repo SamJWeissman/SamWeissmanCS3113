@@ -13,8 +13,8 @@ public:
 	};
 	void identity();
 	Matrix inverse();
-	Matrix operator * (const Matrix &n);
-	Vector operator * (const Vector &v);
+	Matrix operator * (const Matrix &m2);
+	Vector operator * (const Vector &v2);
 };
 
 #endif

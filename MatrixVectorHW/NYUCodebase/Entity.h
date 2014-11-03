@@ -40,6 +40,7 @@ public:
 
 	void renderMeteor();
 	void renderShip();
+	void render();
 	void resetCollisionBools();
 	void buildMatrix();
 	void Update(float elapsed);

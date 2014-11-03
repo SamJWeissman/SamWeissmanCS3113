@@ -29,16 +29,10 @@ public:
 	void render();
 	void renderGameLost();
 	void renderStartScreen();
-	//void obstacle(int x);
 	void processEvents(SDL_Event &event);
+	bool checkForCollision(Entity* e1, Entity* e2);
 	void handleYPenetration(Entity* entity, std::vector<Entity*> entities);
 	void handleXPenetration(Entity* entity, std::vector<Entity*> entities);
-	//void worldToTileCoordinates(float worldX, float worldY, int *gridX, int *gridY);
-	//void checkYlevelCollision(Entity* entity);
-	//void checkXlevelCollision(Entity* entity);
-	//float pointAndGridCollisionXaxis(float x, float y);
-	//float pointAndGridCollisionYaxis(float x, float y);
-	//bool isSolid(unsigned char tile);
 	bool isGameOver();
 
 private:

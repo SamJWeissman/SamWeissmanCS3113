@@ -25,28 +25,11 @@ public:
 
 	DrawingManager();
 	~DrawingManager();
-	void DrawQuad(float width, float height);
+	void DrawQuad(float width, float height, float r, float g, float b);
 	void DrawTriangle(float width, float height);
-	/*void DrawStaticEntity(Entity* entity);
-	void DrawPrize(Entity* entity);
-	void DrawLavaBlob(Entity* entity);
-	void DrawRocketBoost(float x, float y);
-	void DrawSomeText(std::string text, float x, float y, float size, float spacing, float r, float g, float b, float a);
-	void DrawSprite(GLuint texture, float x, float y, float width, float height, float rotation);
-	void DrawSheetSpriteNonUniform(Entity* entity);*/
 	void DrawSheetSpriteUniform(float width, float height, int index);
-	//void DrawBullet(Bullet* bullet); */
 	GLuint LoadTexture(const char *img_path);
-	/*void DrawStatBoard(int energy, int score);
-	void DrawStartScreen();
-	void DrawYouLose(int score, float xZone);
-	void DrawYouWin(int score);
-	void DrawTileLevel(unsigned char levelData[LEVEL_HEIGHT][LEVEL_WIDTH], float zone);
-
-	GLuint fontTexture;*/
 	GLuint spriteSheetTexture;
-	//GLuint levelSheetTexture;
-	//GLuint explosionTexture;
 };
 
 #endif

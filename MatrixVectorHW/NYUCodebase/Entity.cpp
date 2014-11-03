@@ -22,8 +22,6 @@ Entity::Entity(DrawingManager* drawingManager) : drawingMgr(drawingManager)
 
 void Entity::Update(float elapsed)
 {
-	//velocity_x += GRAVITY_X * elapsed;
-	//velocity_y += GRAVITY_Y * elapsed;
 	resetCollisionBools();
 }
 
@@ -40,7 +38,7 @@ bool Entity::collidesWith(Entity *entity)
 }
 void Entity::FixedUpdate()
 {
-	if (!isPlayer) rotation += FIXED_TIMESTEP;
+	if (!isPlayer) rotation += 15 * FIXED_TIMESTEP;
 	//if (rotation >= 360.0f) rotation = 0.0f;
 
 	velocity_x = lerp(velocity_x, 0.0f, FIXED_TIMESTEP * friction_x);
@@ -54,111 +52,57 @@ float Entity::lerp(float v0, float v1, float t)
 	return (1.0f - t) * v0 + t * v1;
 }
 
-/*void Entity::moveY()
+void Entity::movePlayer()
 {
-	y += cos(rotation * PI / 180.0f ) * velocity_y * FIXED_TIMESTEP;
-
-	if (y - height > 2.0f)
-	{
-		y = -2.0f;
-	}
-	if (y + height < -2.0f)
-	{
-		y = 2.0f;
-	}
+	x += velocity_x * FIXED_TIMESTEP;
+	y += velocity_y * FIXED_TIMESTEP;
 }
 
 void Entity::moveX()
 {
-	x += sin(rotation * PI / 180.0f) * velocity_x * FIXED_TIMESTEP;
-
+	x += velocity_x * FIXED_TIMESTEP;
 	if (x - width > 2.66f)
 	{
 		x = -2.66f;
 	}
-	if (x + width < -2.66f)
+	else if (x + width < -2.66f)
 	{
 		x = 2.66f;
 	}
-}*/
-
-void Entity::movePlayer()
-{
-	x += sin(rotation * PI / 180.0f) * velocity_x * FIXED_TIMESTEP;
-	y += cos(rotation * PI / 180.0f) * velocity_y * FIXED_TIMESTEP;
 }
 
-void Entity::buildMatrix()
+void Entity::moveY()
 {
-	matrix.identity();
-	
-	Matrix tmp;
+	y += velocity_y * FIXED_TIMESTEP;
+	if (y - height > 2.00f)
+	{
+		y = -2.00f;
+	}
+	else if (y + height < -2.00f)
+	{
+		y = 2.00f;
+	}
+}
 
-	tmp.m[0][0] = scale_x;
-	tmp.m[0][1] = 0;
-	tmp.m[0][2] = 0;
-	tmp.m[0][3] = 0;
+void Entity::buildMatrix() {
+	Matrix scale;
+	Matrix rotate;
+	Matrix translate;
 
-	tmp.m[1][0] = 0;
-	tmp.m[1][1] = scale_y;
-	tmp.m[1][2] = 0;
-	tmp.m[1][3] = 0;
+	scale.m[0][0] = scale_x;
+	scale.m[1][1] = scale_y;
+	scale.m[2][2] = 0.0f;
 
-	tmp.m[2][0] = 0;
-	tmp.m[2][1] = 0;
-	tmp.m[2][2] = 0; //scale_z
-	tmp.m[2][3] = 0;
+	rotate.m[0][0] = cos(rotation * PI / 180.0f);
+	rotate.m[1][0] = -sin(rotation * PI / 180.0f);
+	rotate.m[0][1] = sin(rotation * PI / 180.0f);
+	rotate.m[1][1] = cos(rotation * PI / 180.0f);
 
-	tmp.m[3][0] = 0;
-	tmp.m[3][1] = 0;
-	tmp.m[3][2] = 0;
-	tmp.m[3][3] = 1;
+	translate.m[3][0] = x;
+	translate.m[3][1] = y;
+	translate.m[3][2] = 0.0f;
 
-	matrix = matrix * tmp;
-
-	tmp.m[0][0] = cos(rotation);
-	tmp.m[0][1] = sin(rotation);
-	tmp.m[0][2] = 0;
-	tmp.m[0][3] = 0;
-
-	tmp.m[1][0] = -sin(rotation);
-	tmp.m[1][1] = cos(rotation);
-	tmp.m[1][2] = 0;
-	tmp.m[1][3] = 0;
-
-	tmp.m[2][0] = 0;
-	tmp.m[2][1] = 0;
-	tmp.m[2][2] = 1;
-	tmp.m[2][3] = 0;
-
-	tmp.m[3][0] = 0;
-	tmp.m[3][1] = 0;
-	tmp.m[3][2] = 0;
-	tmp.m[3][3] = 1;
-
-	matrix = matrix * tmp;
-
-	tmp.m[0][0] = 1;
-	tmp.m[0][1] = 0;
-	tmp.m[0][2] = 0;
-	tmp.m[0][3] = 0;
-
-	tmp.m[1][0] = 0;
-	tmp.m[1][1] = 1;
-	tmp.m[1][2] = 0;
-	tmp.m[1][3] = 0;
-
-	tmp.m[2][0] = 0;
-	tmp.m[2][1] = 0;
-	tmp.m[2][2] = 1;
-	tmp.m[2][3] = 0;
-
-	tmp.m[3][0] = x;
-	tmp.m[3][1] = y;
-	tmp.m[3][2] = 0;
-	tmp.m[3][3] = 1;
-
-	matrix = matrix * tmp;
+	matrix = scale * rotate * translate;
 }
 
 void Entity::renderMeteor()
@@ -168,7 +112,7 @@ void Entity::renderMeteor()
 	glPushMatrix();
 	glMultMatrixf(matrix.ml);
 
-	drawingMgr->DrawQuad(width, height);
+	drawingMgr->DrawQuad(width, height, 1.0f, 0.0f, 0.0f);
 
 	glPopMatrix();
 }
@@ -180,7 +124,7 @@ void Entity::renderShip()
 	glPushMatrix();
 	glMultMatrixf(matrix.ml);
 
-	drawingMgr->DrawTriangle(width, height);
+	drawingMgr->DrawQuad(width, height, 1.0f, 1.0f, 1.0f);
 
 	glPopMatrix();
 }

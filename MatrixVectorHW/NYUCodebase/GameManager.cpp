@@ -34,11 +34,7 @@ void GameManager::setupGL()
 
 void GameManager::setupGameVariables()
 {
-	//state = STATE_START_SCREEN;
 	state = STATE_GAME_RUNNING;
-	//Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
-	//jetPack = Mix_LoadWAV("jet_pack.wav");
-	//collectPrize = Mix_LoadWAV("prize.wav");
 	gameOver = false;
 	lastFrameTicks = 0.0f;
 	elapsed = 0.0f;
@@ -47,26 +43,27 @@ void GameManager::setupGameVariables()
 
 	player = new Player(drawingMgr);
 	entities.push_back(player->ship);
-	/*for (int i = 1; i < 3; i++)
+
+	for (int i = 0; i < 10; i++)
 	{
 		entities.push_back(new Entity(drawingMgr));
-	}*/
+	}
 }
 
 void GameManager::fixedUpdate()
 {
-	//player->ship->FixedUpdate();
-	//player->ship->movePlayer();
-	//handleXPenetration(player->ship, entities);
-	//handleYPenetration(player->ship, entities);
 	for (int i = 0; i < entities.size(); i++)
 	{
 		entities[i]->FixedUpdate();
-		entities[i]->movePlayer();
-		//entities[i]->moveY();
+		entities[i]->moveY();
 		//handleYPenetration(entities[i], entities);
-		//entities[i]->moveX();
+		entities[i]->moveX();
 		//handleXPenetration(entities[i], entities);
+		if(checkForCollision(entities[0], entities[i]))
+		{
+			entities[0]->velocity_x = 0.0f;
+			entities[0]->velocity_y = 0.0f; // **  CANNOT FOR THE LIFE OF ME FIGURE OUT  WHY THIS WONT WORK **
+		};
 	}
 }
 
@@ -118,43 +115,11 @@ void GameManager::render()
 	SDL_GL_SwapWindow(displayWindow);
 }
 
-void GameManager::renderGameLost()
-{
-	glMatrixMode(GL_MODELVIEW);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	//drawingMgr->DrawYouLose(player->score, xZone);
-
-	SDL_GL_SwapWindow(displayWindow);
-}
-
-void GameManager::renderStartScreen()
-{
-	glMatrixMode(GL_MODELVIEW);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	//drawingMgr->DrawStartScreen();
-
-	SDL_GL_SwapWindow(displayWindow);
-}
-
 void GameManager::updateAndRender()
 {
 	fixedLoop();
 	update(elapsed);
-	//if (state == STATE_GAME_RUNNING){
 	render();
-	//}
-	/*else if (state == STATE_GAME_LOSE)
-	{
-		renderGameLost();
-	}
-	else
-	{
-		renderStartScreen();
-	}*/
 }
 
 void GameManager::processEvents(SDL_Event &event)
@@ -165,8 +130,6 @@ void GameManager::processEvents(SDL_Event &event)
 		if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE)
 		{
 			gameOver = true;
-			//Mix_FreeChunk(jetPack);
-			//Mix_FreeChunk(collectPrize);
 		}
 		else if (event.type == SDL_KEYDOWN)
 		{
@@ -186,56 +149,139 @@ void GameManager::processEvents(SDL_Event &event)
 
 void GameManager::handleYPenetration(Entity* entity, std::vector<Entity*> entities)
 {
-
-		for (int i = 0; i < entities.size(); i++) {
-			if (entities[i] != entity)
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i] != entity)
+		{
+			if (entity->collidesWith(entities[i]))
 			{
-				if (entity->collidesWith(entities[i]))
+				if (entity->y < entities[i]->y)
 				{
-					if (entity->y < entities[i]->y)
-					{
-						entity->y += fabs(entity->y - entities[i]->y) -
-							(entity->height * 0.5f) - (entities[i]->height * 0.5f) - .001f;
-						entity->collidedTop = true;
-					}
-					else
-					{
-						entity->collidedBottom = true;
-						entity->y -= fabs(entity->y - entities[i]->y) -
-							(entity->height * 0.5f) - (entities[i]->height * 0.5f) - .001f;
-					}
-					entity->velocity_y *= -1.0f;
-					entity->acceleration_y *= -1.0f;
+					entity->y += fabs(entity->y - entities[i]->y) -
+						(entity->height * 0.5f) - (entities[i]->height * 0.5f) - .001f;
+					entity->collidedTop = true;
 				}
+				else
+				{
+					entity->collidedBottom = true;
+					entity->y -= fabs(entity->y - entities[i]->y) -
+						(entity->height * 0.5f) - (entities[i]->height * 0.5f) - .001f;
+				}
+				entity->velocity_y *= -1.0f;
+				entity->acceleration_y *= -1.0f;
 			}
 		}
+	}
 }
 
 void GameManager::handleXPenetration(Entity* entity, std::vector<Entity*> entities)
 {
 
-		for (int i = 0; i < entities.size(); i++) {
-			if (entities[i] != entity && !entity->collidedBottom)
+	for (int i = 0; i < entities.size(); i++) {
+		if (entities[i] != entity && !entity->collidedBottom)
+		{
+			if (entity->collidesWith(entities[i]))
 			{
-				if (entity->collidesWith(entities[i]))
+				if (entity->x < entities[i]->x)
 				{
-					if (entity->x < entities[i]->x)
-					{
-						entity->x += fabs(entity->x - entities[i]->x) -
-							(entity->width * 0.5f) - (entities[i]->width * 0.5f) - .001f;
-						entity->collidedRight = true;
-					}
-					else
-					{
-						entity->collidedLeft = true;
-						entity->x -= fabs(entity->x - entities[i]->x) -
-							(entity->width * 0.5f) - (entities[i]->width * 0.5f) - .001f;
-					}
-					entity->velocity_x *= -1.0f;
-					entity->acceleration_x *= -1.0f;
+					entity->x += fabs(entity->x - entities[i]->x) -
+						(entity->width * 0.5f) - (entities[i]->width * 0.5f) - .001f;
+					entity->collidedRight = true;
 				}
+				else
+				{
+					entity->collidedLeft = true;
+					entity->x -= fabs(entity->x - entities[i]->x) -
+						(entity->width * 0.5f) - (entities[i]->width * 0.5f) - .001f;
+				}
+				entity->velocity_x *= -1.0f;
+				entity->acceleration_x *= -1.0f;
+
 			}
 		}
+	}
+}
+
+bool GameManager::checkForCollision(Entity* e1, Entity* e2)
+{
+	e1->buildMatrix();
+	e2->buildMatrix();
+
+	//get corner point vectors
+	Vector ent2topLeft = Vector(-e2->width * 0.5, e2->height * 0.5, 0.0);
+	Vector ent2topRight = Vector(e2->width * 0.5, e2->height * 0.5, 0.0); 
+	Vector ent2bottLeft = Vector(-e2->width * 0.5, -e2->height * 0.5, 0.0); 
+	Vector ent2bottRight = Vector(e2->width * 0.5, -e2->height * 0.5, 0.0); 
+
+	//convert to world space
+	ent2topLeft = e2->matrix * ent2topLeft; 
+	ent2topRight = e2->matrix * ent2topRight;
+	ent2bottLeft = e2->matrix * ent2bottLeft;
+	ent2bottRight = e2->matrix * ent2bottRight;
+
+	//set corner point vectors in terms of obj space
+	Matrix e1inv = e1->matrix.inverse();
+	ent2topLeft = e1inv * ent2topLeft;
+	ent2topRight = e1inv * ent2topRight;
+	ent2bottLeft = e1inv * ent2bottLeft;
+	ent2bottRight = e1inv * ent2bottRight;
+
+	//get min x and max x
+	float minX = fmin(fmin(fmin(ent2topLeft.x, ent2topRight.x), ent2bottLeft.x), ent2bottRight.x);
+	float maxX = fmax(fmax(fmax(ent2topLeft.x, ent2topRight.x), ent2bottLeft.x), ent2bottRight.x);
+
+	//check for x collision
+	if (!(minX <= e1->width * 0.5 && maxX >= -e1->width * 0.5)) 
+	{
+		return false;
+	}
+
+	//get min y and max y
+	float minY = fmin(fmin(fmin(ent2topLeft.y, ent2topRight.y), ent2bottLeft.y), ent2bottRight.y);
+	float maxY = fmax(fmax(fmax(ent2topLeft.y, ent2topRight.y), ent2bottLeft.y), ent2bottRight.y);
+
+	//check for y collision
+	if (!(minY <= e1->height * 0.5 && maxY >= -e1->height * 0.5)) 
+	{
+		return false;
+	}
+	//get corner point vectors
+	Vector ent1topLeft = Vector(-e1->width * 0.5, e1->height * 0.5, 0.0); 
+	Vector ent1topRight = Vector(e1->width * 0.5, e1->height * 0.5, 0.0); 
+	Vector ent1bottLeft = Vector(-e1->width * 0.5, -e1->height * 0.5, 0.0); 
+	Vector ent1bottRight = Vector(e1->width * 0.5, -e1->height * 0.5, 0.0); 
+
+	//convert to world space
+	ent1topLeft = e1->matrix * ent1topLeft;
+	ent1topRight = e1->matrix * ent1topRight;
+	ent1bottLeft = e1->matrix * ent1bottLeft;
+	ent1bottRight = e1->matrix * ent1bottRight;
+
+	//set corner point vectors in terms of obj space
+	Matrix e2inv = e2->matrix.inverse();
+	ent1topLeft = e2inv * ent1topLeft;
+	ent1topRight = e2inv * ent1topRight;
+	ent1bottLeft = e2inv * ent1bottLeft;
+	ent1bottRight = e2inv * ent1bottRight;
+
+	//get min x and max x
+	minX = fmin(fmin(fmin(ent1topLeft.x, ent1topRight.x), ent1bottLeft.x), ent1bottRight.x);
+	maxX = fmax(fmax(fmax(ent1topLeft.x, ent1topRight.x), ent1bottLeft.x), ent1bottRight.x);
+	//check for x collision
+
+	if (!(minX <= e2->width * 0.5 && maxX >= -e2->width * 0.5)) 
+	{
+		return false;
+	}
+	//get min y and max y
+	minY = fmin(fmin(fmin(ent1topLeft.y, ent1topRight.y), ent1bottLeft.y), ent1bottRight.y);
+	maxY = fmax(fmax(fmax(ent1topLeft.y, ent1topRight.y), ent1bottLeft.y), ent1bottRight.y);
+	//check for y collision
+	if (!(minY <= e2->height * 0.5 && maxY >= -e2->height * 0.5)) 
+	{
+		return false;
+	}
+
+	return true;
 }
 
 bool GameManager::isGameOver()
