@@ -1,0 +1,11 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="3">
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1032" startPos="8729" endPos="8729" selMode="0" lang="Python" encoding="-1" filename="C:\Users\SJWeissman\Downloads\csefsck.py" backupFilePath="" originalFileLastModifTimestamp="1415329900" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="2136" startPos="1040" endPos="1040" selMode="0" lang="C++" encoding="-1" filename="C:\SamWeissmanCS3113\SingleScreenPlatformer\NYUCodebase\NYUCodebase\Entity.cpp" backupFilePath="" originalFileLastModifTimestamp="1412299026" />
+            <File firstVisibleLine="163" xOffset="0" scrollWidth="1000" startPos="4144" endPos="4144" selMode="0" lang="C++" encoding="-1" filename="C:\SamWeissmanCS3113\SingleScreenPlatformer\NYUCodebase\NYUCodebase\GameManager.cpp" backupFilePath="" originalFileLastModifTimestamp="1412419409" />
+            <File firstVisibleLine="111" xOffset="0" scrollWidth="1984" startPos="4971" endPos="4971" selMode="0" lang="C++" encoding="-1" filename="C:\SamWeissmanCS3113\TileMapGame\NYUCodebase\NYUCodebase\DrawingManager.cpp" backupFilePath="" originalFileLastModifTimestamp="1413754613" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>
