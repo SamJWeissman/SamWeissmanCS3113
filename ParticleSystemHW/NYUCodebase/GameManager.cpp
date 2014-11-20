@@ -120,10 +120,6 @@ void GameManager::update()
 		drawingManager->shakeScreen(elapsed, 20.0f, 5.0f);
 		screenShakeTime += elapsed;
 	}
-	//else
-	//{
-	//	drawingManager->stopScreenShake();
-	//}
 }
 
 void GameManager::render()
@@ -138,12 +134,15 @@ void GameManager::render()
 		for (int i = 0; i < entityManager->numEntities(); i++)
 		{
 			drawingManager->DrawSheetSprite(entityManager->getEntityAt(i));
+			if (i > 0)
+			{
+				drawingManager->DrawEnemyEngineTrail(entityManager->getEntityAt(i));
+			}
 			if (i > 0 && rand() % 1000 >= 997)
 			{
 				enemyBullets[i]->fire((entityManager->getEntityAt(i))->getX(), (entityManager->getEntityAt(i))->getY());
 			}
 			drawingManager->DrawBullet(enemyBullets[i]);
-			//drawingManager->DrawBulletTrail(enemyBullets[i]);
 		}
 		for (int i = 0; i < player->getBullets().size(); i++)
 		{
@@ -184,7 +183,6 @@ void GameManager::updateAndRender()
 
 void GameManager::processEvents(SDL_Event &event)
 {
-
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE)
@@ -207,6 +205,22 @@ void GameManager::processEvents(SDL_Event &event)
 			else if (event.key.keysym.scancode == SDL_SCANCODE_LCTRL)
 			{
 				player->shoot();
+				for (int i = 1; i < entityManager->numEntities(); i++)
+				{
+					Entity* ent = entityManager->getEntityAt(i);
+					float diff = abs(player->getSpaceship()->getX() - ent->getX());
+					if (diff < .1f && rand() % 1000 < 50)
+					{
+						if (ent->getX() < -0.0f)
+						{
+							ent->bankRight();
+						}
+						else
+						{
+							ent->bankLeft();
+						}
+					}
+				}
 			}
 		}
 	}

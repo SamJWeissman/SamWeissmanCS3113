@@ -91,6 +91,25 @@ void DrawingManager::DrawBulletTrail(Bullet* bullet)
 	glDisable(GL_COLOR_ARRAY);
 }
 
+void DrawingManager::DrawEnemyEngineTrail(Entity* enemy)
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glLineWidth(4.0f);
+	glTranslatef(enemy->getX() + ((sin(screenShakeValue * screenShakeSpeed) / 100.0f) * screenShakeIntensity), enemy->getY(), 0.0f);
+	Vertex2D lineData[2] = {
+			{ 0.0f, enemy->getHeight() * (6.0f - rand() % 3), 1.0f, .5f, 0.0f, 0.0f },
+			{ 0.0f, enemy->getHeight() / 2.0f - .025f, 1.0f, .5f, 0.0f, 1.0f },
+	};
+	glVertexPointer(2, GL_FLOAT, sizeof(float) * 6, lineData);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColorPointer(4, GL_FLOAT, sizeof(float) * 6, &lineData[0].r);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glDrawArrays(GL_LINES, 0, 2);
+	glDisable(GL_VERTEX_ARRAY);
+	glDisable(GL_COLOR_ARRAY);
+}
+
 void DrawingManager::DrawSprite(GLuint texture, float x, float y, float width, float height, float rotation)
 {
 	glEnable(GL_TEXTURE_2D);

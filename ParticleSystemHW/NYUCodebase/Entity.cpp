@@ -77,6 +77,18 @@ void Entity::setAccelerationX(float updateAccelX)
 	acceleration_x = updateAccelX;
 }
 
+void Entity::bankRight()
+{
+	velocity_x = float(1 + rand() % 3);
+	velocity_y = -1.0f;
+}
+
+void Entity::bankLeft()
+{
+	velocity_x = float(-(1 + rand() % 3));
+	velocity_y = -1.0f;
+}
+
 bool Entity::checkEntitytoEntityCollision(Entity* other)
 {
 	if (y - (height / 2.0f) > (other->y + ((other->height) / 2.0f)) || (y + (height / 2.0f) < (other->y - ((other->height) / 2.0f))) || (x - (width / 2.0f) > (other->x + ((other->width) / 2.0f))) || (x + (width / 2.0f) < (other->x - ((other->width) / 2.0f))))

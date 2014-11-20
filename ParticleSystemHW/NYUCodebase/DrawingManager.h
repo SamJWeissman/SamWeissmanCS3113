@@ -27,6 +27,7 @@ public:
 	void DrawSheetSprite(Entity* entity);
 	void DrawBullet(Bullet* bullet);
 	void DrawBulletTrail(Bullet* bullet);
+	void DrawEnemyEngineTrail(Entity* entity);
 	void shakeScreen(float elapsed, float shakeSpeed, float shakeIntensity);
 	void stopScreenShake();
 	GLuint LoadTexture(const char *img_path);

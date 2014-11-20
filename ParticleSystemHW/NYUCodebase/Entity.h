@@ -59,6 +59,9 @@ public:
 
 	float lerp(float v0, float v1, float t);
 
+	void bankRight();
+	void bankLeft();
+
 	void FixedUpdate();
 	void move(float elapsed);
 	void moveX();
