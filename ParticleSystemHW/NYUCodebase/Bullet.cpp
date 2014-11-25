@@ -1,10 +1,4 @@
 #include "Bullet.h"
-#include <math.h>
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <SDL_image.h>
-#include "Entity.h"
-#include <random>
 
 const float PI = 3.141595359f;
 
@@ -27,7 +21,7 @@ void Bullet::fire(float xStart, float yStart)
 	{
 		x = xStart + 0.0f;
 		y = yStart - 0.1f + (rand() % 10 * .01);
-		speed = 1.0f;
+		speed = 2.0f;
 		angle = 267 + (rand() % 6);
 	}
 	else

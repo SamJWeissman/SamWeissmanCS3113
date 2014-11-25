@@ -1,10 +1,11 @@
 #pragma once
 #include "EntityManager.h"
-#include "Entity.h"
-#include "Player.h"
-#include <vector>
 
-EntityManager::EntityManager(Player* user) : player(user) {}
+
+EntityManager::EntityManager(Player* user) : player(user) 
+{
+	multiplier = 1.0f;
+}
 EntityManager::~EntityManager(){}
 
 bool EntityManager::enemyShipBrokeThrough()
@@ -17,7 +18,7 @@ bool EntityManager::enemyShipBrokeThrough()
 			entities[i] = entities[entities.size() - 1];
 			//delete(entities[entities.size() - 1]);
 			entities.pop_back();
-			player->takeDamage(4);
+			player->takeDamage(3);
 			shipsBrokeThrough = true;
 		}
 	}
@@ -89,7 +90,7 @@ int EntityManager::numEntities()
 	return entities.size();
 }
 
-void EntityManager::firstWave()
+void EntityManager::orangeWave()
 {
 	while (entities.size() > 1)
 	{
@@ -98,12 +99,12 @@ void EntityManager::firstWave()
 	}
 	for (int i = 0; i < 10; i++)
 	{
-		entities.push_back(new Entity(-1.3f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 384.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.3f + (rand() % 7 * .1f))));
-		entities.push_back(new Entity(0.0f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 384.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.3f + (rand() % 7 * .1f))));
+		entities.push_back(new Entity(-1.3f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 384.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.3f * multiplier +(rand() % 7 * .1f))));
+		entities.push_back(new Entity(0.0f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 384.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.3f * multiplier + (rand() % 7 * .1f))));
 	}
 }
 
-void EntityManager::secondWave()
+void EntityManager::greenWave()
 {
 	while (entities.size() > 1)
 	{
@@ -112,12 +113,12 @@ void EntityManager::secondWave()
 	}
 	for (int i = 0; i < 10; i++)
 	{
-		entities.push_back(new Entity(-1.3f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 552.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.4f + (rand() % 7 * .1f))));
-		entities.push_back(new Entity(0.0f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 552.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.4f + (rand() % 7 * .1f))));
+		entities.push_back(new Entity(-1.3f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 552.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.4f * multiplier + (rand() % 7 * .1f))));
+		entities.push_back(new Entity(0.0f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 552.0f / 1024.0f, 0.1f, 0.1f, 0.0f, -(.4f * multiplier + (rand() % 7 * .1f))));
 	}
 }
 
-void EntityManager::thirdWave()
+void EntityManager::blueWave()
 {
 	while (entities.size() > 1)
 	{
@@ -127,8 +128,21 @@ void EntityManager::thirdWave()
 
 	for (int i = 0; i < 10; i++)
 	{
-		entities.push_back(new Entity(-1.3f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 468 / 1024.0f, 0.1f, 0.1f, 0.0f, -(.5f + (rand() % 7 * .1f))));
-		entities.push_back(new Entity(0.0f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 468 / 1024.0f, 0.1f, 0.1f, 0.0f, -(.5f + (rand() % 7 * .1f))));
+		entities.push_back(new Entity(-1.3f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 468 / 1024.0f, 0.1f, 0.1f, 0.0f, -(.5f * multiplier + (rand() % 7 * .1f))));
+		entities.push_back(new Entity(0.0f + ((rand() % 130) * .01f), 1.5f, 0.0f, 425.0f / 1024.0f, 468 / 1024.0f, 0.1f, 0.1f, 0.0f, -(.5f * multiplier + (rand() % 7 * .1f))));
+	}
+}
+
+void EntityManager::sneakyWave() 
+{
+	float acceleration = -1.0f;
+	float xPos = -.6f + ((rand() % 120) * .01f);
+	for (int i = 0; i < 5; i++)
+	{
+		Entity* sneakyEnt = new Entity(xPos, 1.5f + (i * 0.1f), 0.0f, 423.0f / 1024.0f, 728.0f / 1024.0f, 0.1f, 0.1f, 0.0f, acceleration * multiplier);
+		sneakyEnt->setSneaky(true);
+		sneakyEnt->decrementTimeAlive(i * .1f);
+		entities.push_back(sneakyEnt);
 	}
 }
 
@@ -138,6 +152,12 @@ void EntityManager::clusterWave()
 	float xPos = -1.3f + ((rand() % 260) * .01f);
 	for (int i = 0; i < 5; i++)
 	{
-		entities.push_back(new Entity(xPos, 1.5f + (i * 0.1f), 0.0f, 423.0f / 1024.0f, 728.0f / 1024.0f, 0.1f, 0.1f, 0.0f, acceleration));
+		entities.push_back(new Entity(xPos, 1.5f + (i * 0.1f), 0.0f, 423.0f / 1024.0f, 728.0f / 1024.0f, 0.1f, 0.1f, 0.0f, acceleration * multiplier));
 	}
+}
+
+
+void EntityManager::increaseSpeed()
+{
+	multiplier += 0.5f;
 }

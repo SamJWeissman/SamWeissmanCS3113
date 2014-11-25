@@ -1,10 +1,7 @@
 #pragma once
-#include "Entity.h"
-#include "EntityManager.h"
-#include "Bullet.h"
 #include "CollisionManager.h"
-#include <vector>
-#include "Player.h"
+
+
 
 CollisionManager::CollisionManager(std::vector<Bullet*> bullets, EntityManager* entityMgr, Player* user) : enemyBullets(bullets), entityManager(entityMgr), player(user) 
 {
@@ -12,8 +9,9 @@ CollisionManager::CollisionManager(std::vector<Bullet*> bullets, EntityManager* 
 }
 CollisionManager::~CollisionManager(){}
 
-void CollisionManager::bulletsVsEntities()
+bool CollisionManager::bulletsVsEntities()
 {
+	bool enemyDestroyed = false;
 	for (int i = 0; i < playerBullets.size(); i++)
 	{
 		for (int j = 0; j < entityManager->numEntities(); j++)
@@ -31,9 +29,11 @@ void CollisionManager::bulletsVsEntities()
 				entityManager->removeEntityAt(j);
 				player->changeScore(5);
 				player->increaseHealth();
+				enemyDestroyed = true;
 			}
 		}
 	}
+	return enemyDestroyed;
 }
 
 bool CollisionManager::entityVsPlayer()
@@ -51,7 +51,7 @@ bool CollisionManager::entityVsPlayer()
 		else
 		{
 			entityManager->removeEntityAt(i);
-			player->takeDamage(3);
+			player->takeDamage(2);
 			shakeScreen = true;
 		}
 	}

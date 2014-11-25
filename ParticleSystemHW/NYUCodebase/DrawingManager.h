@@ -3,6 +3,7 @@
 #include <string>
 #include "Entity.h"
 #include "Bullet.h"
+#include "Star.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <SDL_image.h>
@@ -26,12 +27,13 @@ public:
 	void DrawSprite(GLuint texture, float x, float y, float width, float height, float rotation);
 	void DrawSheetSprite(Entity* entity);
 	void DrawBullet(Bullet* bullet);
+	void DrawStar(Star star);
 	void DrawBulletTrail(Bullet* bullet);
 	void DrawEnemyEngineTrail(Entity* entity);
 	void shakeScreen(float elapsed, float shakeSpeed, float shakeIntensity);
 	void stopScreenShake();
 	GLuint LoadTexture(const char *img_path);
-	void DrawStatBoard(int health, int score);
+	void DrawStatBoard(int health, int waveCounter, int score);
 	void DrawStartScreen();
 	void DrawYouLose(int score);
 	void DrawYouWin(int score);

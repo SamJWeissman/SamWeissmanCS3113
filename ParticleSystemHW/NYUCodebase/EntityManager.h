@@ -2,10 +2,10 @@
 #define _ENTITYMANAGER_H_
 
 #include "Entity.h"
-#include <vector>
 #include "Player.h"
 #include "Particle.h"
 #include "ParticleEmitter.h"
+#include <vector>
 
 class EntityManager
 {
@@ -18,17 +18,20 @@ public:
 	void removeEntityAt(int index);
 	void pushEntity(Entity* entity);
 	void removeLastEntity(Entity* entity);
-	void firstWave();
-	void secondWave();
-	void thirdWave();
+	void orangeWave();
+	void greenWave();
+	void blueWave();
+	void sneakyWave();
 	void clusterWave();
 	void renderParticles();
 	void updateEmitters(float elapsed);
 	int numEntities();
+	void increaseSpeed();
 private:
 	std::vector<Entity*> entities;
 	std::vector<ParticleEmitter> particleEmitters;
 	Player* player;
+	float multiplier;
 };
 
 #endif

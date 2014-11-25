@@ -57,10 +57,14 @@ public:
 	float getDirY();
 	void setDirY(float yDir);
 
+	float getTimeAlive();
+
 	float lerp(float v0, float v1, float t);
 
 	void bankRight();
 	void bankLeft();
+	void setSneaky(bool updateSneaky);
+	void decrementTimeAlive(float val);
 
 	void FixedUpdate();
 	void move(float elapsed);
@@ -68,6 +72,7 @@ public:
 	void moveY();
 
 private:
+	bool sneaky;
 	float x;
 	float y;
 	float u;
@@ -88,6 +93,7 @@ private:
 	float friction_y;
 	float direction_x;
 	float direction_y;
+	float timeAlive;
 
 };
 

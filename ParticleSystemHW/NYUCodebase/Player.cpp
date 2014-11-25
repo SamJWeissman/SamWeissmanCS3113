@@ -1,17 +1,12 @@
 #pragma once
 #include "Player.h"
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <SDL_image.h>
-#include "Entity.h"
-#include <vector>
 
 Player::Player()
 {
 	bulletCounter = 0;
 	score = 0;
 	health = 100;
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < 40; i++)
 	{
 		bullets.push_back(new Bullet(false));
 	}
@@ -83,7 +78,7 @@ void Player::shoot()
 		bullets[bulletCounter]->fire(spaceShip->getX(), spaceShip->getY());
 	}
 	bulletCounter++;
-	if (bulletCounter == 15)
+	if (bulletCounter == 20)
 	{
 		bulletCounter = 0;
 	}

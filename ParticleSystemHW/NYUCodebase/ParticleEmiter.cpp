@@ -26,7 +26,6 @@ void ParticleEmitter::Render()
 	glDrawArrays(GL_POINTS, 0, particleVertices.size() / 2);
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_COLOR_ARRAY);
-
 }
 
 void ParticleEmitter::Update(float elapsed)

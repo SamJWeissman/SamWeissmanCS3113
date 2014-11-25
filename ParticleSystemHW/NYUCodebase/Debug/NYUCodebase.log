@@ -1,12 +1,12 @@
-﻿Build started 11/19/2014 3:46:27 PM.
-     1>Project "C:\SamWeissmanCS3113\SamWeissmanCS3113\ParticleSystemHW\NYUCodebase\NYUCodebase.vcxproj" on node 2 (Build target(s)).
+﻿Build started 11/25/2014 8:43:18 AM.
+     1>Project "C:\SamWeissmanCS3113\ParticleSystemHW\NYUCodebase\NYUCodebase.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\SDL2\include /IC:\SDL2_image\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Entity.cpp
-         Entity.cpp
-     1>c:\samweissmancs3113\samweissmancs3113\particlesystemhw\nyucodebase\entity.cpp(105): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
-     1>cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\SDL2\include /I"C:\SDL2_mixer-2.0.0\include" /IC:\SDL2_image\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GameManager.cpp
+         GameManager.cpp
+     1>c:\samweissmancs3113\particlesystemhw\nyucodebase\gamemanager.cpp(187): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\samweissmancs3113\particlesystemhw\nyucodebase\gamemanager.cpp(201): warning C4018: '<' : signed/unsigned mismatch
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\SamWeissmanCS3113\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\SDL2\lib\x86 /LIBPATH:C:\SDL2_image\lib\x86 SDL2.lib SDL2main.lib SDL2_image.lib OpenGL32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\SamWeissmanCS3113\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\SamWeissmanCS3113\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.lib" /MACHINE:X86 Debug\Bullet.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\SDL2\lib\x86 /LIBPATH:"C:\SDL2_mixer-2.0.0\lib\x86" /LIBPATH:C:\SDL2_image\lib\x86 SDL2.lib SDL2main.lib SDL2_image.lib OpenGL32.lib SDL2_mixer.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.lib" /MACHINE:X86 Debug\Bullet.obj
          Debug\CollisionManager.obj
          Debug\DrawingManager.obj
          Debug\Entity.obj
@@ -17,10 +17,11 @@
          Debug\ParticleEmiter.obj
          Debug\Paticle.obj
          Debug\Player.obj
+         Debug\Star.obj
          Debug\Vector.obj
-         NYUCodebase.vcxproj -> C:\SamWeissmanCS3113\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.exe
-     1>Done Building Project "C:\SamWeissmanCS3113\SamWeissmanCS3113\ParticleSystemHW\NYUCodebase\NYUCodebase.vcxproj" (Build target(s)).
+         NYUCodebase.vcxproj -> C:\SamWeissmanCS3113\ParticleSystemHW\Debug\NYUCodebase.exe
+     1>Done Building Project "C:\SamWeissmanCS3113\ParticleSystemHW\NYUCodebase\NYUCodebase.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.95
+Time Elapsed 00:00:11.53

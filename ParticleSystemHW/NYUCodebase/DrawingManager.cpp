@@ -57,16 +57,31 @@ void DrawingManager::DrawBullet(Bullet* bullet)
 	glTranslatef(bullet->getX() + ((sin(screenShakeValue * screenShakeSpeed) / 100.0f) * screenShakeIntensity), bullet->getY(), 0.0f);
 	glRotated(bullet->getAngle(), 0.0f, 0.0f, 1.0f);
 	Vertex2D quadData[4] =	{	
-								{ -bullet->getSize(), bullet->getSize(), 1.0f, 1.0f, 1.0f, 1.0f }, 
-								{ -bullet->getSize(), -bullet->getSize(), 1.0f, 1.0f, 1.0f, 1.0f }, 
-								{ bullet->getSize(), -bullet->getSize(), 1.0f, 1.0f, 1.0f, 1.0f }, 
-								{ bullet->getSize(), bullet->getSize(), 1.0f, 1.0f, 1.0f, 1.0f }
+								{ -bullet->getSize(), bullet->getSize(), 1.0f, 1.0f, 0.0f, 1.0f }, 
+								{ -bullet->getSize(), -bullet->getSize(), 1.0f, 1.0f, 0.0f, 1.0f }, 
+								{ bullet->getSize(), -bullet->getSize(), 1.0f, 1.0f, 0.0f, 1.0f }, 
+								{ bullet->getSize(), bullet->getSize(), 1.0f, 1.0f, 0.0f, 1.0f }
 							};
 	glVertexPointer(4, GL_FLOAT, sizeof(float) * 6, quadData);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glColorPointer(4, GL_FLOAT, sizeof(float) * 6, &quadData[0].r);
 	glEnableClientState(GL_COLOR_ARRAY);
 	glDrawArrays(GL_QUADS, 0, 4);
+	glDisable(GL_VERTEX_ARRAY);
+	glDisable(GL_COLOR_ARRAY);
+}
+
+void DrawingManager::DrawStar(Star star)
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glPointSize(1);
+	std::vector<float> starVertices;
+	starVertices.push_back(star.x);
+	starVertices.push_back(star.y);
+	glVertexPointer(2, GL_FLOAT, 0, starVertices.data());
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glDrawArrays(GL_POINTS, 0, starVertices.size() / 2);
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_COLOR_ARRAY);
 }
@@ -220,10 +235,11 @@ void DrawingManager::DrawSheetSprite(Entity* entity)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void DrawingManager::DrawStatBoard(int health, int score)
+void DrawingManager::DrawStatBoard(int health, int wave, int score)
 {
-	DrawSomeText("Health: " + std::to_string(health), -1.3f, .97f, 0.1f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	DrawSomeText("Score: " + std::to_string(score), 0.4f, .97f, 0.1f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	DrawSomeText("Health:" + std::to_string(health), -1.3f, .97f, 0.075f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	DrawSomeText("Wave:" + std::to_string(wave), -0.15, .97f, 0.075f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	DrawSomeText("Score:" + std::to_string(score), 0.65f, .97f, 0.075f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void DrawingManager::DrawStartScreen()

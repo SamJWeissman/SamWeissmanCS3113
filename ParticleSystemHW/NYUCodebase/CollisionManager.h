@@ -11,7 +11,7 @@ class CollisionManager{
 public:
 	CollisionManager(std::vector<Bullet*> bullets, EntityManager* entityMgr, Player* user);
 	~CollisionManager();
-	void bulletsVsEntities();
+	bool bulletsVsEntities();
 	bool entityVsPlayer();
 	bool bulletsVsPlayer();
 
