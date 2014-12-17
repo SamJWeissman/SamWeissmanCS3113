@@ -15,7 +15,7 @@ void Bullet::impact()
 	speed = 0.0f;
 }
 
-void Bullet::fire(float xStart, float yStart)
+void Bullet::fire(float xStart, float yStart, bool bigGun)
 {
 	if (isEnemyBullet)
 	{
@@ -26,10 +26,20 @@ void Bullet::fire(float xStart, float yStart)
 	}
 	else
 	{
-		x = xStart + 0.0f;
-		y = yStart + 0.1f + (rand() % 10 * .01);
-		speed = 1.5f;
-		angle = 87 + (rand() % 6);
+		if (!bigGun)
+		{		
+			x = xStart + 0.0f;
+			y = yStart + 0.1f + (rand() % 10 * .01);
+			speed = 1.5f;
+			angle = 87 + (rand() % 6);
+		}
+		else
+		{
+			x = xStart + 0.0f;
+			y = yStart + 0.1f + (rand() % 10 * .01);
+			speed = 3.0f;
+			angle = 50 + (rand() % 80);
+		}
 	}
 }
 

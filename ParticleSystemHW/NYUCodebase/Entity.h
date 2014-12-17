@@ -64,6 +64,8 @@ public:
 	void bankRight();
 	void bankLeft();
 	void setSneaky(bool updateSneaky);
+	void setSpecial(bool updateSpecial);
+	bool getSpecial();
 	void decrementTimeAlive(float val);
 
 	void FixedUpdate();
@@ -73,6 +75,7 @@ public:
 
 private:
 	bool sneaky;
+	bool special;
 	float x;
 	float y;
 	float u;
@@ -81,14 +84,10 @@ private:
 	float width;
 	float height;
 	float speed;
-	//float velocityX;
-	//float velocityY;
 	float velocity_x;
 	float velocity_y;
 	float acceleration_x;
 	float acceleration_y;
-	//float accelerationX;
-	//float accelerationY;
 	float friction_x;
 	float friction_y;
 	float direction_x;

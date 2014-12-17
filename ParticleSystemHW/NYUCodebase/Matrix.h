@@ -1,4 +1,4 @@
-#ifndef _MATRIX_H_
+ifndef _MATRIX_H_
 #define _MATRIX_H_
 
 #include "Vector.h"

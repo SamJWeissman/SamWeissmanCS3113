@@ -26,6 +26,10 @@ bool CollisionManager::bulletsVsEntities()
 			else
 			{
 				playerBullets[i]->impact();
+				if (entityManager->getEntityAt(j)->getSpecial())
+				{
+					player->setBigGun(true);
+				}
 				entityManager->removeEntityAt(j);
 				player->changeScore(5);
 				player->increaseHealth();

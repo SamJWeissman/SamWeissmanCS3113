@@ -6,6 +6,7 @@ Player::Player()
 	bulletCounter = 0;
 	score = 0;
 	health = 100;
+	bigGun = false;
 	for (int i = 0; i < 40; i++)
 	{
 		bullets.push_back(new Bullet(false));
@@ -71,11 +72,11 @@ std::vector<Bullet*> Player::getBullets()
 	return bullets;
 }
 
-void Player::shoot()
+void Player::shoot(bool special)
 {
 	if (bullets[bulletCounter] != nullptr)
 	{
-		bullets[bulletCounter]->fire(spaceShip->getX(), spaceShip->getY());
+		bullets[bulletCounter]->fire(spaceShip->getX(), spaceShip->getY(), special);
 	}
 	bulletCounter++;
 	if (bulletCounter == 20)
@@ -87,6 +88,52 @@ void Player::shoot()
 bool Player::getBoost()
 {
 	return boost;
+}
+
+void Player::placeWarp()
+{
+	warp = spaceShip->getX();
+	warpSet = true;
+}
+
+bool Player::playerWarped()
+{
+	return warped;
+}
+
+void Player::setWarped(bool updateWarped)
+{
+	warped = updateWarped;
+}
+
+bool Player::isWarp()
+{
+	return warpSet;
+}
+
+float Player::getWarpX()
+{
+	return warp;
+}
+
+void Player::moveToWarp()
+{
+	if (warpSet)
+	{
+		spaceShip->setX(warp);
+		warpSet = false;
+		warped = true;
+	}
+}
+
+void Player::setBigGun(bool updateBigGun)
+{
+	bigGun = updateBigGun;
+}
+
+bool Player::getBigGun()
+{
+	return bigGun;
 }
 
 void Player::checkInputControls()
@@ -118,5 +165,14 @@ void Player::checkInputControls()
 	else
 	{
 		boost = false;
+	}
+
+	if (keys[SDL_SCANCODE_Z] == 1)
+	{
+		placeWarp();
+	}
+	if (keys[SDL_SCANCODE_X] == 1)
+	{
+		moveToWarp();
 	}
 }

@@ -9,6 +9,7 @@ Entity::Entity(float xPos, float yPos, float rot, float xOnSheet, float yOnSheet
 	friction_x = 2.5f;
 	friction_y = 2.5f;
 	sneaky = false;
+	special = false;
 }
 
 Entity::~Entity()
@@ -95,6 +96,16 @@ void Entity::bankLeft()
 void Entity::setSneaky(bool newSneaky)
 {
 	sneaky = newSneaky;
+}
+
+void Entity::setSpecial(bool updateSpecial)
+{
+	special = updateSpecial;
+}
+
+bool Entity::getSpecial()
+{
+	return special;
 }
 
 void Entity::decrementTimeAlive(float val)

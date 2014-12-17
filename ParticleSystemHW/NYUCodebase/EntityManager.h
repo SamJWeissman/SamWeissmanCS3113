@@ -22,11 +22,13 @@ public:
 	void greenWave();
 	void blueWave();
 	void sneakyWave();
-	void clusterWave();
+	void linearWave();
+	void specialEnt();
 	void renderParticles();
 	void updateEmitters(float elapsed);
 	int numEntities();
 	void increaseSpeed();
+	void resetSpeed();
 private:
 	std::vector<Entity*> entities;
 	std::vector<ParticleEmitter> particleEmitters;

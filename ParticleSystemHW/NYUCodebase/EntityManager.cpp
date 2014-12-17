@@ -33,7 +33,6 @@ void EntityManager::updateEmitters(float elapsed)
 		if (particleEmitters[i].removeMe)
 		{
 			particleEmitters[i] = particleEmitters[particleEmitters.size() - 1];
-			//delete(particleEmitters[particleEmitters.size() - 1]);
 			particleEmitters.pop_back();
 		}
 	}
@@ -46,7 +45,6 @@ Entity* EntityManager::getEntityAt(int index)
 
 void EntityManager::removeEntityAt(int index)
 {
-	//entities[index]->particleEmitter = new ParticleEmitter();
 	entities[index]->explosion.x = entities[index]->getX();
 	entities[index]->explosion.y = entities[index]->getY();
 	entities[index]->explosion.removeMe = false;
@@ -60,7 +58,7 @@ void EntityManager::removeEntityAt(int index)
 		particle.velocity_y = -.05f + rand() % 10 * .01f;
 		entities[index]->explosion.particles.push_back(particle);
 	}
-	entities[index]->explosion.maxLifetime = 0.25f;
+	entities[index]->explosion.maxLifetime = 0.5f;
 	particleEmitters.push_back(entities[index]->explosion);
 	entities[index] = entities[entities.size() - 1];
 	//delete(entities[entities.size() - 1]);
@@ -146,7 +144,7 @@ void EntityManager::sneakyWave()
 	}
 }
 
-void EntityManager::clusterWave()
+void EntityManager::linearWave()
 {
 	float acceleration = -(.6f + (rand() % 7 * .1f));
 	float xPos = -1.3f + ((rand() % 260) * .01f);
@@ -156,8 +154,23 @@ void EntityManager::clusterWave()
 	}
 }
 
+void EntityManager::specialEnt()
+{
+	float acceleration = -1.0f;
+	float xPos = -.6f + ((rand() % 120) * .01f);
+	Entity* specialEnt = new Entity(xPos, 1.5f, 0.0f, 444.0f / 1024.0f, 91.0f / 1024.0f, 0.09f, 0.09f, 0.0f, acceleration * multiplier);
+	specialEnt->setSneaky(true);
+	specialEnt->setSpecial(true);
+	entities.push_back(specialEnt);
+}
+
 
 void EntityManager::increaseSpeed()
 {
 	multiplier += 0.5f;
+}
+
+void EntityManager::resetSpeed()
+{
+	multiplier = 1.0f;
 }

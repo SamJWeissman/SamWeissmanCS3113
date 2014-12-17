@@ -16,7 +16,7 @@ public:
 	float getAngle();
 	float getSize();
 	bool isVisible();
-	void fire(float x, float y);
+	void fire(float x, float y, bool bigGun);
 	void impact();
 	void update(float elapsed);
 
